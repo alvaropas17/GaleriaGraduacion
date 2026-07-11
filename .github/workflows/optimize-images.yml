@@ -1,0 +1,50 @@
+# Al subir fotos a images/, genera las miniaturas y el manifest automáticamente
+# y los añade al repositorio. No hace falta tocar código para añadir fotos.
+name: Optimizar imágenes
+
+on:
+  push:
+    paths:
+      - 'images/**'
+      - '!images/thumbs/**'
+      - '!images/manifest.json'
+      - 'scripts/generate-manifest.mjs'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: optimize-images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Generar miniaturas y manifest
+        run: node scripts/generate-manifest.mjs
+
+      - name: Publicar los cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/thumbs images/manifest.json
+          if git diff --cached --quiet; then
+            echo "Nada que actualizar."
+          else
+            git commit -m "Genera miniaturas y manifest de la galería"
+            git push
+          fi

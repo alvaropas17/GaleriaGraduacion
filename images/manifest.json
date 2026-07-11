@@ -1,0 +1,100 @@
+{
+  "images": [
+    {
+      "file": "muestra-atardecer.jpg",
+      "width": 3000,
+      "height": 2000,
+      "color": "#584838",
+      "hash": "a8fc7ad74cc8",
+      "thumbs": {
+        "400": "thumbs/muestra-atardecer-400.webp",
+        "800": "thumbs/muestra-atardecer-800.webp",
+        "1200": "thumbs/muestra-atardecer-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-birrete.jpg",
+      "width": 2000,
+      "height": 3000,
+      "color": "#283858",
+      "hash": "079a8690c359",
+      "thumbs": {
+        "400": "thumbs/muestra-birrete-400.webp",
+        "800": "thumbs/muestra-birrete-800.webp",
+        "1200": "thumbs/muestra-birrete-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-brindis.jpg",
+      "width": 3000,
+      "height": 2000,
+      "color": "#d8b878",
+      "hash": "ee896c389c8e",
+      "thumbs": {
+        "400": "thumbs/muestra-brindis-400.webp",
+        "800": "thumbs/muestra-brindis-800.webp",
+        "1200": "thumbs/muestra-brindis-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-diploma.jpg",
+      "width": 2400,
+      "height": 2400,
+      "color": "#684848",
+      "hash": "b876b3ba2420",
+      "thumbs": {
+        "400": "thumbs/muestra-diploma-400.webp",
+        "800": "thumbs/muestra-diploma-800.webp",
+        "1200": "thumbs/muestra-diploma-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-familia.jpg",
+      "width": 3000,
+      "height": 2250,
+      "color": "#487868",
+      "hash": "41df72605adf",
+      "thumbs": {
+        "400": "thumbs/muestra-familia-400.webp",
+        "800": "thumbs/muestra-familia-800.webp",
+        "1200": "thumbs/muestra-familia-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-fiesta.jpg",
+      "width": 2000,
+      "height": 2800,
+      "color": "#c89848",
+      "hash": "599e42d310be",
+      "thumbs": {
+        "400": "thumbs/muestra-fiesta-400.webp",
+        "800": "thumbs/muestra-fiesta-800.webp",
+        "1200": "thumbs/muestra-fiesta-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-paseo.jpg",
+      "width": 3200,
+      "height": 1800,
+      "color": "#283858",
+      "hash": "486fb3ac48f9",
+      "thumbs": {
+        "400": "thumbs/muestra-paseo-400.webp",
+        "800": "thumbs/muestra-paseo-800.webp",
+        "1200": "thumbs/muestra-paseo-1200.webp"
+      }
+    },
+    {
+      "file": "muestra-recuerdo.jpg",
+      "width": 2200,
+      "height": 3000,
+      "color": "#686868",
+      "hash": "03462f9f2a54",
+      "thumbs": {
+        "400": "thumbs/muestra-recuerdo-400.webp",
+        "800": "thumbs/muestra-recuerdo-800.webp",
+        "1200": "thumbs/muestra-recuerdo-1200.webp"
+      }
+    }
+  ]
+}

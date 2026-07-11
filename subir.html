@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subir fotos</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0a1128">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <main class="upload-page">
+    <div class="upload-card">
+      <h1>Subir fotos</h1>
+
+      <div id="step-config" hidden>
+        <p>
+          Esta página usa el modo <strong>Cloudinary</strong>, que aún no está configurado.
+          Edita <code>js/config.js</code> con tu <em>cloudName</em> y <em>uploadPreset</em>
+          siguiendo el README.
+        </p>
+        <p>
+          Si usas el modo <strong>carpeta del repositorio</strong>, no necesitas esta página:
+          sube tus fotos a <code>images/</code> desde la web de GitHub.
+        </p>
+      </div>
+
+      <div id="step-key" hidden>
+        <p>Introduce la clave para abrir el subidor de fotos.</p>
+        <input type="password" id="upload-key" placeholder="Clave" autocomplete="off">
+        <button class="btn-gold" id="key-btn">Entrar</button>
+      </div>
+
+      <div id="step-widget" hidden>
+        <p>Las fotos que subas aparecerán en la galería automáticamente.</p>
+        <button class="btn-gold" id="open-widget">Elegir fotos</button>
+      </div>
+
+      <p class="upload-msg" id="upload-msg"></p>
+    </div>
+    <p class="upload-back"><a href="index.html">← Volver a la galería</a></p>
+  </main>
+
+  <script src="https://upload-widget.cloudinary.com/latest/global/all.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const cfg = window.GALLERY_CONFIG.cloudinary || {};
+      const msg = document.getElementById('upload-msg');
+      const stepConfig = document.getElementById('step-config');
+      const stepKey = document.getElementById('step-key');
+      const stepWidget = document.getElementById('step-widget');
+
+      if (!cfg.cloudName || cfg.cloudName === 'TU_CLOUD_NAME' || !cfg.uploadPreset) {
+        stepConfig.hidden = false;
+        return;
+      }
+
+      stepKey.hidden = false;
+      const input = document.getElementById('upload-key');
+
+      function checkKey() {
+        if (input.value === cfg.uploadKey) {
+          stepKey.hidden = true;
+          stepWidget.hidden = false;
+          msg.textContent = '';
+          msg.className = 'upload-msg';
+        } else {
+          msg.textContent = 'Clave incorrecta.';
+          msg.className = 'upload-msg error';
+        }
+      }
+      document.getElementById('key-btn').addEventListener('click', checkKey);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkKey(); });
+
+      const widget = window.cloudinary && window.cloudinary.createUploadWidget(
+        {
+          cloudName: cfg.cloudName,
+          uploadPreset: cfg.uploadPreset,
+          tags: [cfg.tag],
+          sources: ['local', 'camera', 'google_drive'],
+          multiple: true,
+          maxFileSize: 40 * 1024 * 1024,
+          clientAllowedFormats: ['image'],
+          language: 'es',
+          text: {
+            es: {
+              or: 'o',
+              menu: { files: 'Mis archivos', camera: 'Cámara', google_drive: 'Google Drive' },
+              local: {
+                browse: 'Explorar',
+                dd_title_single: 'Arrastra tu foto aquí',
+                dd_title_multi: 'Arrastra tus fotos aquí',
+              },
+              queue: { title: 'Fotos en cola', done: 'Hecho' },
+            },
+          },
+          styles: {
+            palette: {
+              window: '#0d1b2a',
+              windowBorder: '#3d5a80',
+              tabIcon: '#d9a94b',
+              menuIcons: '#c8c2b4',
+              textDark: '#0a1128',
+              textLight: '#f2ece0',
+              link: '#d9a94b',
+              action: '#d9a94b',
+              inactiveTabIcon: '#5c6b80',
+              error: '#e88f6a',
+              inProgress: '#d9a94b',
+              complete: '#7bc47f',
+              sourceBg: '#14263f',
+            },
+          },
+        },
+        (error, result) => {
+          if (error) {
+            msg.textContent = 'Error al subir. Inténtalo de nuevo.';
+            msg.className = 'upload-msg error';
+          } else if (result && result.event === 'success') {
+            msg.textContent = '✓ «' + result.info.original_filename + '» subida. Ya está en la galería.';
+            msg.className = 'upload-msg ok';
+          }
+        }
+      );
+
+      document.getElementById('open-widget').addEventListener('click', () => {
+        if (widget) widget.open();
+        else {
+          msg.textContent = 'No se pudo cargar el subidor de Cloudinary. Revisa tu conexión.';
+          msg.className = 'upload-msg error';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
