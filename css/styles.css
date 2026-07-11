@@ -21,10 +21,15 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: var(--navy-950);
+  overflow-x: hidden;
+}
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background:
     radial-gradient(1200px 600px at 80% -10%, rgba(61, 90, 128, 0.25), transparent 60%),
     linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 60%, var(--navy-950) 100%);
@@ -34,6 +39,12 @@ body {
   font-weight: 300;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* En móvil, background-attachment: fixed provoca parpadeos/huecos blancos
+   durante el scroll táctil (rubber-banding). Se desactiva para touch. */
+@media (hover: none) and (pointer: coarse) {
+  body { background-attachment: scroll; }
 }
 
 ::selection { background: var(--gold); color: var(--navy-900); }
