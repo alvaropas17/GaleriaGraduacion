@@ -25,6 +25,9 @@ html {
   scroll-behavior: smooth;
   background: var(--navy-950);
   overflow-x: hidden;
+  /* Base más grande de lo habitual para que el texto se lea cómodo
+     en cualquier pantalla, incluida gente con dificultades de vista. */
+  font-size: 112.5%;
 }
 
 body {
@@ -36,9 +39,11 @@ body {
   background-attachment: fixed;
   color: var(--cream);
   font-family: var(--font-body);
-  font-weight: 300;
-  line-height: 1.6;
+  font-weight: 400;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* En móvil, background-attachment: fixed provoca parpadeos/huecos blancos
@@ -146,9 +151,10 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 0.55rem;
+  padding: 0.6rem 1rem;
   color: var(--cream-dim);
   text-decoration: none;
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   transition: color 0.3s;
@@ -202,8 +208,8 @@ body {
 .gallery-count {
   margin: 1rem 0 2.5rem;
   text-align: center;
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--cream-dim);
 }
@@ -258,17 +264,22 @@ body {
   bottom: 0.7rem;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(6, 13, 31, 0.65);
   color: var(--gold-soft);
-  opacity: 0;
+  /* Visible por defecto: en pantallas táctiles no existe hover, así que
+     sin esto no habría forma de saber que la foto se puede ampliar. */
+  opacity: 0.9;
   transition: opacity 0.3s;
   backdrop-filter: blur(4px);
 }
 
-.gallery-item:hover .zoom-hint { opacity: 1; }
+@media (hover: hover) {
+  .gallery-item .zoom-hint { opacity: 0; }
+  .gallery-item:hover .zoom-hint { opacity: 1; }
+}
 
 .gallery-status {
   display: flex;
@@ -278,11 +289,21 @@ body {
   padding: 3rem 1rem;
   color: var(--cream-dim);
   text-align: center;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
 .gallery-status[hidden] { display: none; }
 
-.gallery-status.error { color: var(--gold-soft); }
+/* Los mensajes de error pueden ser frases largas: centrarlas las hace
+   más difíciles de leer, así que se alinean a la izquierda como un párrafo. */
+.gallery-status.error {
+  display: block;
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--gold-soft);
+  text-align: left;
+}
 
 /* --------------------------------------------------------------------------
    Footer
@@ -291,7 +312,7 @@ body {
 .footer {
   padding: 2.5rem 1.25rem 3rem;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--cream-dim);
 }
 
@@ -386,7 +407,7 @@ body {
 .lb-topbar > * { pointer-events: auto; }
 
 .lb-counter {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   letter-spacing: 0.15em;
   color: var(--cream-dim);
   font-variant-numeric: tabular-nums;
@@ -436,10 +457,10 @@ body {
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
-  padding: 0.35rem 0.9rem;
+  padding: 0.4rem 1rem;
   border-radius: 99px;
   background: rgba(20, 38, 63, 0.6);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--cream-dim);
   white-space: nowrap;
   transition: opacity 0.6s;
@@ -449,8 +470,12 @@ body {
 .lb-hint.fade { opacity: 0; }
 
 @media (max-width: 640px) {
-  .lb-nav { width: 44px; height: 44px; background: rgba(20, 38, 63, 0.4); }
-  .lb-hint { font-size: 0.7rem; }
+  .lb-nav { width: 46px; height: 46px; background: rgba(20, 38, 63, 0.4); }
+  .lb-hint { font-size: 0.78rem; }
+}
+
+@media (max-width: 360px) {
+  .lb-hint { white-space: normal; text-align: center; max-width: 88vw; }
 }
 
 /* --------------------------------------------------------------------------
@@ -481,9 +506,20 @@ body {
   font-family: var(--font-display);
   font-size: 1.9rem;
   font-weight: 600;
+  text-align: center;
 }
 
-.upload-card p { color: var(--cream-dim); font-size: 0.95rem; }
+/* Los párrafos son frases largas: en vez de centrarlas (más difícil de
+   seguir con la vista), se alinean a la izquierda como un texto normal. */
+.upload-card p {
+  margin: 0 0 1rem;
+  color: var(--cream-dim);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.upload-card p:last-child { margin-bottom: 0; }
 
 .upload-card input[type="password"] {
   width: 100%;
@@ -518,12 +554,12 @@ body {
 .btn-gold:hover { box-shadow: 0 6px 24px rgba(217, 169, 75, 0.35); transform: translateY(-1px); }
 .btn-gold:active { transform: translateY(0) scale(0.98); }
 
-.upload-msg { min-height: 1.4em; margin-top: 1rem; font-size: 0.9rem; }
+.upload-msg { min-height: 1.4em; margin-top: 1rem; font-size: 1rem; text-align: center; }
 .upload-msg.error { color: #e88f6a; }
 .upload-msg.ok { color: var(--gold-soft); }
 
 .upload-back { margin-top: 2rem; }
-.upload-back a { color: var(--cream-dim); font-size: 0.85rem; }
+.upload-back a { color: var(--cream-dim); font-size: 0.95rem; }
 .upload-back a:hover { color: var(--gold); }
 
 /* --------------------------------------------------------------------------
