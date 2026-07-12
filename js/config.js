@@ -8,7 +8,7 @@ window.GALLERY_CONFIG = {
    *   'local'      → fotos subidas a la carpeta images/ del repositorio
    *   'cloudinary' → fotos alojadas en tu cuenta de Cloudinary
    */
-  source: 'local',
+  source: 'cloudinary',
 
   /* Textos de la portada */
   hero: {
@@ -23,7 +23,7 @@ window.GALLERY_CONFIG = {
 
   /* Solo necesario si source: 'cloudinary' (ver README) */
   cloudinary: {
-    cloudName: 'TU_CLOUD_NAME',       // p. ej. 'dx1abc234'
+    cloudName: 'z1t7v4xi',
     tag: 'graduacion',                // etiqueta que agrupa las fotos de la galería
     uploadPreset: 'graduacion_web',   // preset unsigned para la página de subida
     // Clave que se pide en subir.html. ⚠️ Es solo disuasoria (visible en el
