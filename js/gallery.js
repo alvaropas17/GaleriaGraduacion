@@ -74,18 +74,23 @@
       );
     }
     const base = `https://res.cloudinary.com/${cloudName}`;
-    const res = await fetch(`${base}/image/list/${encodeURIComponent(tag)}.json`, { cache: 'no-cache' });
-    if (!res.ok) {
+    const [images, videos] = await Promise.all([
+      listResources(base, tag, 'image'),
+      listResources(base, tag, 'video'),
+    ]);
+    if (!images && !videos) {
       throw new Error(
         'No se pudo obtener la lista de fotos de Cloudinary. Comprueba que el cloudName y la ' +
         'etiqueta son correctos y que "Resource list" está permitido en los ajustes de seguridad (ver README).'
       );
     }
-    const data = await res.json();
-    return (data.resources || []).map((r) => {
+    return [...(images || []).map(mapImage), ...(videos || []).map(mapVideo)];
+
+    function mapImage(r) {
       const id = `v${r.version}/${r.public_id}.${r.format}`;
       const t = (tr) => `${base}/image/upload/${tr}/${id}`;
       return {
+        type: 'image',
         thumb: t('f_auto,q_auto,c_limit,w_800'),
         srcset: [400, 800, 1200]
           .map((w) => `${t(`f_auto,q_auto,c_limit,w_${w}`)} ${w}w`)
@@ -97,7 +102,40 @@
         color: '#14263f',
         alt: prettyName(r.public_id.split('/').pop()),
       };
-    });
+    }
+
+    function mapVideo(r) {
+      const id = `v${r.version}/${r.public_id}`;
+      const poster = (tr) => `${base}/video/upload/${tr}/${id}.jpg`;
+      const t = (tr) => `${base}/video/upload/${tr}/${id}.${r.format}`;
+      return {
+        type: 'video',
+        thumb: poster('so_0,f_jpg,q_auto,c_limit,w_800'),
+        srcset: [400, 800, 1200]
+          .map((w) => `${poster(`so_0,f_jpg,q_auto,c_limit,w_${w}`)} ${w}w`)
+          .join(', '),
+        poster: poster('so_0,f_jpg,q_auto,c_limit,w_1200'),
+        full: t('f_auto,q_auto'),
+        download: t('fl_attachment'),
+        width: r.width,
+        height: r.height,
+        color: '#14263f',
+        alt: prettyName(r.public_id.split('/').pop()),
+      };
+    }
+  }
+
+  /* Devuelve la lista de recursos de un tipo (image/video) o null si falla
+     (por ejemplo si no hay recursos de ese tipo con la etiqueta). */
+  async function listResources(base, tag, resourceType) {
+    try {
+      const res = await fetch(`${base}/${resourceType}/list/${encodeURIComponent(tag)}.json`, { cache: 'no-cache' });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.resources || [];
+    } catch (_) {
+      return null;
+    }
   }
 
   function renderGallery(photos) {
@@ -113,7 +151,7 @@
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'gallery-item';
-      item.setAttribute('aria-label', 'Ampliar foto: ' + photo.alt);
+      item.setAttribute('aria-label', (photo.type === 'video' ? 'Reproducir vídeo: ' : 'Ampliar foto: ') + photo.alt);
       if (photo.color) item.style.backgroundColor = photo.color;
       if (photo.width && photo.height) {
         item.style.aspectRatio = `${photo.width} / ${photo.height}`;
@@ -131,11 +169,20 @@
       if (img.complete) img.classList.add('loaded');
       else img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
 
-      const hint = document.createElement('span');
-      hint.className = 'zoom-hint';
-      hint.setAttribute('aria-hidden', 'true');
-      hint.innerHTML =
-        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+      let hint;
+      if (photo.type === 'video') {
+        hint = document.createElement('span');
+        hint.className = 'play-badge';
+        hint.setAttribute('aria-hidden', 'true');
+        hint.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(6,13,31,0.55)"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor"/></svg>';
+      } else {
+        hint = document.createElement('span');
+        hint.className = 'zoom-hint';
+        hint.setAttribute('aria-hidden', 'true');
+        hint.innerHTML =
+          '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+      }
 
       item.append(img, hint);
       item.addEventListener('click', () => window.Lightbox.open(photos, i));

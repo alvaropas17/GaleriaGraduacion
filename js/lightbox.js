@@ -9,6 +9,7 @@
   const root = document.getElementById('lightbox');
   const stage = document.getElementById('lb-stage');
   const img = document.getElementById('lb-img');
+  const video = document.getElementById('lb-video');
   const spinner = document.getElementById('lb-spinner');
   const counter = document.getElementById('lb-counter');
   const downloadBtn = document.getElementById('lb-download');
@@ -54,6 +55,9 @@
     root.hidden = true;
     document.body.style.overflow = '';
     img.removeAttribute('src');
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
@@ -61,12 +65,26 @@
     index = (i + photos.length) % photos.length;
     const photo = photos[index];
     resetZoom();
-    spinner.hidden = false;
-    img.style.opacity = '0.35';
-    img.alt = photo.alt || '';
-    img.src = photo.full;
-    if (img.complete) onLoaded();
-    else img.addEventListener('load', onLoaded, { once: true });
+    video.pause();
+
+    if (photo.type === 'video') {
+      img.hidden = true;
+      video.hidden = false;
+      spinner.hidden = false;
+      video.poster = photo.poster || '';
+      video.src = photo.full;
+      video.load();
+      video.addEventListener('loadeddata', onLoaded, { once: true });
+    } else {
+      video.hidden = true;
+      img.hidden = false;
+      spinner.hidden = false;
+      img.style.opacity = '0.35';
+      img.alt = photo.alt || '';
+      img.src = photo.full;
+      if (img.complete) onLoaded();
+      else img.addEventListener('load', onLoaded, { once: true });
+    }
 
     counter.textContent = `${index + 1} / ${photos.length}`;
     downloadBtn.href = photo.download;
@@ -83,7 +101,9 @@
 
   function preload(i) {
     const photo = photos[(i + photos.length) % photos.length];
-    if (photo) new Image().src = photo.full;
+    if (!photo) return;
+    if (photo.type === 'video') new Image().src = photo.poster;
+    else new Image().src = photo.full;
   }
 
   function suggestFilename(photo) {
@@ -150,19 +170,20 @@
   }
 
   stage.addEventListener('wheel', (e) => {
-    if (root.hidden) return;
+    if (root.hidden || !video.hidden) return;
     e.preventDefault();
     const factor = e.deltaY < 0 ? 1.18 : 1 / 1.18;
     zoomAt(e.clientX, e.clientY, scale * factor);
   }, { passive: false });
 
   stage.addEventListener('dblclick', (e) => {
+    if (!video.hidden) return;
     e.preventDefault();
     zoomAt(e.clientX, e.clientY, scale > 1 ? 1 : 2.5);
   });
 
   stage.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.lb-topbar, .lb-nav')) return;
+    if (e.target.closest('.lb-topbar, .lb-nav') || e.target.closest('video')) return;
     stage.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 

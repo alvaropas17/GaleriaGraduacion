@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "manifest": "node scripts/generate-manifest.mjs",
-    "serve": "python3 -m http.server 8000"
+    "serve": "python3 -m http.server 8000 --bind 127.0.0.1"
   },
   "dependencies": {
     "sharp": "^0.34.2"
