@@ -1242,6 +1242,10 @@ main::after {
   background: var(--papel);
 }
 
+.hero-figura {
+  margin: 0;
+}
+
 .hero-foto {
   position: absolute;
   grid-column: 1;
