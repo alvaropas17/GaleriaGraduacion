@@ -1244,6 +1244,8 @@ main::after {
 
 .hero-foto {
   position: absolute;
+  grid-column: 1;
+  grid-row: 1;
   top: -10%;
   left: 0;
   z-index: 0;
@@ -1272,6 +1274,8 @@ main::after {
 
 .hero-velo {
   position: absolute;
+  grid-column: 1;
+  grid-row: 1;
   inset: 0;
   z-index: 1;
   background: linear-gradient(
