@@ -1425,3 +1425,30 @@ main::after {
     display: none;
   }
 }
+
+@media (min-width: 761px) {
+  .hero {
+    --hero-margen: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+
+  .hero-foto {
+    top: var(--hero-margen);
+    left: var(--hero-margen);
+    width: calc(100% - var(--hero-margen) * 2);
+    height: calc(100% - var(--hero-margen) * 2);
+    border-radius: 1.5rem;
+  }
+
+  .hero-velo {
+    inset: var(--hero-margen);
+    border-radius: 1.5rem;
+  }
+
+  .hero-contenido {
+    margin-bottom: var(--hero-margen);
+  }
+
+  .hero-pie {
+    bottom: calc(1.5rem + var(--hero-margen));
+  }
+}
