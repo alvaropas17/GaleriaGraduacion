@@ -946,7 +946,38 @@ body { background: var(--papel); background-image: none; }
 @media (min-width: 720px) { .masonry { grid-template-columns:repeat(3,minmax(0,1fr)); } .polaroid-destacada { grid-column:span 2; } }
 @media (max-width: 680px) { .hero { min-height: 47rem; padding:.75rem; } .hero-foto, .hero-velo { inset:.75rem; width:calc(100% - 1.5rem); height:18rem; border-radius:1rem; } .hero-contenido { top:16rem; left:1.35rem; right:1.35rem; translate:0; width:auto; padding:1.35rem; } .hero-titulo { font-size:clamp(3rem,14vw,4.4rem); } .hero-acciones { display:grid; } .hero-acciones .boton { text-align:center; } .hero-flecha { display:none; } .hero-forma-azul { left:auto; right:1rem; bottom:.75rem; width:7rem; height:4rem; } .hero-forma-rosa { width:3.5rem; height:3.5rem; right:1rem; top:1rem; } .tira-negativos { padding-left:1rem; } .capitulo { padding-inline:1rem; } }
 @media (max-width: 480px) { .masonry { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .negativo, .polaroid { transition:none; } }
+
+/* ---- Fondo temático: ilustración que cambia según la foto visible -------- */
+.fondo-tematico { position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
+.fondo-tema { position:absolute; inset:0; opacity:0; transition:opacity .9s ease; }
+.fondo-tema-activo { opacity:.16; }
+.fondo-tema-noche.fondo-tema-activo { opacity:.22; }
+.fondo-tema svg { width:100%; height:100%; }
+
+/* ---- Zoom de densidad: cuántas fotos caben por fila ---------------------- */
+.zoom-densidad { position:sticky; top:.75rem; z-index:5; display:flex; align-items:center; gap:.5rem; width:max-content; max-width:calc(100% - 2rem); margin:.75rem auto 0; padding:.4rem .6rem; background:var(--polaroid); border:3px solid var(--tinta); border-radius:999px; box-shadow:var(--sombra); }
+.zoom-boton { width:2.1rem; height:2.1rem; flex:none; display:grid; place-items:center; border:2px solid var(--tinta); border-radius:50%; background:#fff; color:var(--tinta); font:800 1.15rem/1 var(--texto); line-height:0; cursor:pointer; transition:transform .2s ease, opacity .2s ease; }
+.zoom-boton:hover:not(:disabled), .zoom-boton:focus-visible { transform:translateY(-2px); }
+.zoom-boton:disabled { opacity:.35; cursor:default; }
+.zoom-niveles { display:flex; gap:.3rem; }
+.zoom-niveles i { width:.4rem; height:.4rem; border-radius:50%; background:var(--tinta-suave); opacity:.4; }
+.zoom-anuncio { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+.masonry { transition:opacity .2s ease; }
+.cambiando-densidad { opacity:.55; }
+
+#galeria[data-densidad="1"] .masonry { grid-template-columns:repeat(1,minmax(0,1fr)); }
+#galeria[data-densidad="3"] .masonry { grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (min-width: 720px) {
+  #galeria[data-densidad="1"] .masonry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #galeria[data-densidad="3"] .masonry { grid-template-columns:repeat(4,minmax(0,1fr)); }
+}
+@media (max-width: 480px) {
+  #galeria[data-densidad="1"] .masonry { grid-template-columns:repeat(1,minmax(0,1fr)); }
+  #galeria[data-densidad="3"] .masonry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) { .negativo, .polaroid, .fondo-tema, .masonry { transition:none; } }
 
 /* Ajuste de composición: la información no se superpone a las personas. */
 body {

@@ -134,6 +134,7 @@ export function renderGaleria(datos, manifest) {
     capitulo.fotos.forEach((foto, indiceFoto) => {
       const figura = document.createElement("figure");
       figura.className = "polaroid revelar";
+      figura.dataset.tema = foto.tema || "playa";
       if (indiceFoto === 0 || (capitulo.fotos.length > 8 && indiceFoto === 7)) figura.classList.add("polaroid-destacada");
       const indiceGlobal = fotosPlanas.length;
       const mediaIndex = fotosPlanas.length;

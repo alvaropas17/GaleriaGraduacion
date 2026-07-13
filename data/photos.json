@@ -121,15 +121,18 @@
         },
         {
           "src": "photos/LosNietos/por-la-noche.jpg",
-          "caption": ""
+          "caption": "",
+          "tema": "noche"
         },
         {
           "src": "photos/LosNietos/voley-02.jpg",
-          "caption": ""
+          "caption": "",
+          "tema": "voley"
         },
         {
           "src": "photos/LosNietos/voley.jpg",
-          "caption": ""
+          "caption": "",
+          "tema": "voley"
         }
       ]
     },

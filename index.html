@@ -19,6 +19,40 @@
 </head>
 <body>
 
+  <!-- Fondo ilustrado que cambia según el tema de las fotos visibles -->
+  <div class="fondo-tematico" aria-hidden="true">
+    <span class="fondo-tema fondo-tema-playa fondo-tema-activo" data-fondo-tema="playa">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <circle cx="330" cy="70" r="42" fill="var(--mostaza)"/>
+        <path d="M0 210 Q50 190 100 210 T200 210 T300 210 T400 210 V400 H0 Z" fill="var(--washi-azul)"/>
+        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--azul)"/>
+        <path d="M40 130 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M90 150 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="fondo-tema fondo-tema-voley" data-fondo-tema="voley">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--mostaza)"/>
+        <line x1="200" y1="60" x2="200" y2="260" stroke="var(--tinta-suave)" stroke-width="5"/>
+        <line x1="120" y1="90" x2="280" y2="90" stroke="var(--tinta-suave)" stroke-width="5"/>
+        <path d="M120 90 L120 150 M150 90 L150 150 M180 90 L180 150 M210 90 L210 150 M240 90 L240 150 M270 90 L270 150" stroke="var(--tinta-suave)" stroke-width="2" opacity=".55"/>
+        <circle cx="300" cy="150" r="26" fill="var(--washi-rosa)" stroke="var(--tinta-suave)" stroke-width="3"/>
+      </svg>
+    </span>
+    <span class="fondo-tema fondo-tema-noche" data-fondo-tema="noche">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <rect width="400" height="400" fill="#22344a"/>
+        <circle cx="320" cy="80" r="34" fill="var(--mostaza)"/>
+        <circle cx="60" cy="60" r="3" fill="#fff9ee"/>
+        <circle cx="140" cy="110" r="2.4" fill="#fff9ee"/>
+        <circle cx="220" cy="50" r="2" fill="#fff9ee"/>
+        <circle cx="90" cy="160" r="2.6" fill="#fff9ee"/>
+        <circle cx="260" cy="140" r="2" fill="#fff9ee"/>
+        <circle cx="180" cy="190" r="2.2" fill="#fff9ee"/>
+      </svg>
+    </span>
+  </div>
+
   <!-- Portada -->
   <header class="hero" id="inicio">
     <img class="hero-foto" id="hero-foto" alt="" aria-hidden="true">
@@ -35,6 +69,12 @@
   <main>
     <nav class="tira-negativos" id="navegacion-capitulos" aria-label="Saltar a un capítulo"></nav>
     <section class="ficha-album" id="ficha-album" aria-label="Índice del álbum" hidden></section>
+    <div class="zoom-densidad" id="zoom-densidad" role="group" aria-label="Tamaño de las fotos en la galería">
+      <button type="button" class="zoom-boton" id="zoom-menos" aria-label="Ver fotos más grandes (menos por fila)">−</button>
+      <span class="zoom-niveles" aria-hidden="true"><i></i><i></i><i></i></span>
+      <button type="button" class="zoom-boton" id="zoom-mas" aria-label="Ver más fotos por fila">+</button>
+      <span class="zoom-anuncio" id="zoom-anuncio" aria-live="polite"></span>
+    </div>
     <!-- Capítulos de la galería (se generan desde data/photos.json) -->
     <div id="galeria" class="galeria" aria-label="Galería de fotos por capítulos"></div>
 

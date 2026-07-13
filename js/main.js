@@ -7,6 +7,8 @@ import { initReacciones } from "./reactions.js";
 import { initDedicatorias } from "./guestbook.js";
 import { initMapa } from "./map.js";
 import { initRevelado, initContador, initRecuerdoAleatorio } from "./extras.js";
+import { initZoomDensidad } from "./zoom.js";
+import { initFondoTematico } from "./temas.js";
 
 async function cargarJson(ruta, obligatorio) {
   try {
@@ -36,6 +38,8 @@ async function arrancar() {
   initMapa(fotos, manifest);
   initReacciones();
   initDedicatorias();
+  initZoomDensidad();
+  initFondoTematico();
 }
 
 arrancar().catch((err) => {
