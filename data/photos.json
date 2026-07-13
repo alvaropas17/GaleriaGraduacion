@@ -19,27 +19,33 @@
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-02.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-03.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-04.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-05.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-06.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-07.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-08.jpg",
@@ -47,19 +53,23 @@
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-09.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-10.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-11.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-12.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-13.jpg",
@@ -67,35 +77,43 @@
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-14.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-15.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-16.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-17.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-18.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["atardecer"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-19.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["juego"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-20.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["juego"]
         },
         {
           "src": "photos/LosNietos/los-nietos-finde-21.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["juego"]
         },
         {
           "src": "photos/LosNietos/VID-20260628-WA0016.mp4",
@@ -109,15 +127,18 @@
         },
         {
           "src": "photos/LosNietos/biceps-eduardo-sale-cara.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa"]
         },
         {
           "src": "photos/LosNietos/biceps-eduardo.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa"]
         },
         {
           "src": "photos/LosNietos/foto-en-coche.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["atardecer"]
         },
         {
           "src": "photos/LosNietos/por-la-noche.jpg",
@@ -125,11 +146,13 @@
         },
         {
           "src": "photos/LosNietos/voley-02.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "juego"]
         },
         {
           "src": "photos/LosNietos/voley.jpg",
-          "caption": ""
+          "caption": "",
+          "categorias": ["playa", "juego"]
         }
       ]
     },

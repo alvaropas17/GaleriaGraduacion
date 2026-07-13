@@ -12,6 +12,11 @@ const NOMBRES_NAVEGACION = {
   "los-viajes": "Viajes",
   "la-gran-noche": "Graduación"
 };
+const CATEGORIAS_INFO = {
+  juego: { emoji: "🎲", etiqueta: "Juego" },
+  playa: { emoji: "🏖️", etiqueta: "Playa" },
+  atardecer: { emoji: "🌅", etiqueta: "Atardecer" }
+};
 
 function renderNavegacion(capitulos) {
   const navegacion = document.getElementById("navegacion-capitulos");
@@ -135,6 +140,7 @@ export function renderGaleria(datos, manifest) {
       const figura = document.createElement("figure");
       figura.className = "polaroid revelar";
       if (indiceFoto === 0 || (capitulo.fotos.length > 8 && indiceFoto === 7)) figura.classList.add("polaroid-destacada");
+      if (foto.categorias?.length) figura.dataset.categorias = foto.categorias.join(" ");
       const indiceGlobal = fotosPlanas.length;
       const mediaIndex = fotosPlanas.length;
 
@@ -196,7 +202,53 @@ export function renderGaleria(datos, manifest) {
     contenedor.append(seccion);
   });
 
+  renderFiltros(capitulosVisibles[0]);
+
   return fotosPlanas;
+}
+
+function renderFiltros(capitulo) {
+  const contenedor = document.getElementById("filtros-categoria");
+  if (!capitulo) {
+    contenedor.hidden = true;
+    return;
+  }
+
+  const categoriasPresentes = new Set();
+  capitulo.fotos.forEach((foto) => foto.categorias?.forEach((c) => categoriasPresentes.add(c)));
+  if (categoriasPresentes.size === 0) {
+    contenedor.hidden = true;
+    return;
+  }
+
+  const aplicarFiltro = (categoria) => {
+    contenedor.querySelectorAll(".filtro-chip").forEach((chip) => {
+      chip.setAttribute("aria-pressed", String(chip.dataset.categoria === categoria));
+    });
+    document.querySelectorAll(`#${capitulo.id} .polaroid`).forEach((figura) => {
+      const categorias = figura.dataset.categorias?.split(" ") ?? [];
+      const visible = categoria === "todas" || categorias.includes(categoria);
+      figura.classList.toggle("filtro-oculto", !visible);
+      if (visible) figura.classList.add("visible");
+    });
+  };
+
+  const chips = [{ id: "todas", emoji: "✨", etiqueta: "Todas" }];
+  for (const id of Object.keys(CATEGORIAS_INFO)) {
+    if (categoriasPresentes.has(id)) chips.push({ id, ...CATEGORIAS_INFO[id] });
+  }
+
+  contenedor.replaceChildren();
+  chips.forEach(({ id, emoji, etiqueta }) => {
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "filtro-chip";
+    boton.dataset.categoria = id;
+    boton.setAttribute("aria-pressed", String(id === "todas"));
+    boton.innerHTML = `<span aria-hidden="true">${emoji}</span><span>${etiqueta}</span>`;
+    boton.addEventListener("click", () => aplicarFiltro(id));
+    contenedor.append(boton);
+  });
 }
 
 export function renderHero(datos, manifest) {
