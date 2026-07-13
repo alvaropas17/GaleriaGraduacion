@@ -1,0 +1,56 @@
+name: Desplegar a GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Optimizar imágenes (WebP responsive + placeholders)
+        run: npm run optimizar
+
+      - name: Montar la carpeta de publicación
+        # Solo se publica lo que la web necesita: las fotos se sirven ya
+        # optimizadas desde assets/img, no hace falta subir los originales.
+        run: |
+          mkdir dist
+          cp -r index.html css js data assets robots.txt dist/
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empaquetar la web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Publicar
+        id: despliegue
+        uses: actions/deploy-pages@v4

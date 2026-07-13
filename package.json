@@ -1,0 +1,22 @@
+{
+  "name": "galeria-graduacion",
+  "version": "1.0.0",
+  "description": "Galería de fotos de graduación para compartir con amigos",
+  "type": "module",
+  "scripts": {
+    "fotos": "node scripts/scan-photos.mjs",
+    "optimizar": "node scripts/optimize-images.mjs",
+    "placeholders": "node scripts/make-placeholders.mjs",
+    "build": "node scripts/optimize-images.mjs",
+    "servir": "npx --yes serve -l 4173 ."
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/nunito": "^5.2.7",
+    "@supabase/supabase-js": "^2.110.2",
+    "leaflet": "^1.9.4",
+    "photoswipe": "^5.4.4",
+    "sharp": "^0.35.3"
+  }
+}

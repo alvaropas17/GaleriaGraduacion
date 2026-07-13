@@ -1,0 +1,5 @@
+node_modules/
+
+# Generados por scripts/optimize-images.mjs (se regeneran en cada despliegue)
+assets/img/
+data/manifest.json

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7efe2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#221a13" media="(prefers-color-scheme: dark)">
+  <title>Nuestra graduación 🎓</title>
+  <meta name="description" content="Nuestra galería de recuerdos de la graduación. Hecha por y para nosotros.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <link rel="preload" href="assets/fonts/caveat-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="js/vendor/photoswipe/photoswipe.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Portada -->
+  <header class="hero" id="inicio">
+    <img class="hero-foto" id="hero-foto" alt="" aria-hidden="true">
+    <div class="hero-velo"></div>
+    <div class="hero-contenido">
+      <p class="hero-etiqueta" id="hero-subtitulo"></p>
+      <h1 class="hero-titulo" id="hero-titulo"></h1>
+      <p class="hero-frase" id="hero-frase"></p>
+      <p class="hero-fecha" id="hero-fecha"></p>
+      <div class="hero-acciones">
+        <a class="boton boton-principal" href="#galeria">Ver los recuerdos ↓</a>
+        <a class="boton boton-secundario" href="#dedicatorias">Dejar una dedicatoria</a>
+      </div>
+    </div>
+    <a class="hero-flecha" href="#galeria" aria-label="Bajar a la galería">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <!-- Capítulos de la galería (se generan desde data/photos.json) -->
+    <div id="galeria" class="galeria" aria-label="Galería de fotos por capítulos"></div>
+
+    <!-- Mapa de recuerdos -->
+    <section class="seccion mapa-seccion revelar" id="mapa-seccion" hidden>
+      <header class="seccion-cabecera">
+        <p class="seccion-etiqueta">Los lugares</p>
+        <h2 class="seccion-titulo">Nuestro mapa de recuerdos</h2>
+        <p class="seccion-texto">Cada pin es un sitio donde pasó algo que merece ser recordado.</p>
+      </header>
+      <div id="mapa" class="mapa" role="region" aria-label="Mapa con los lugares de las fotos"></div>
+    </section>
+
+    <!-- Muro de dedicatorias -->
+    <section class="seccion dedicatorias revelar" id="dedicatorias">
+      <header class="seccion-cabecera">
+        <p class="seccion-etiqueta">Para el recuerdo</p>
+        <h2 class="seccion-titulo">Muro de dedicatorias</h2>
+        <p class="seccion-texto">Deja aquí lo que quieras decirle a la panda. Sin registros ni cuentas: escribe y listo.</p>
+      </header>
+      <p class="aviso-local" id="aviso-local" hidden>
+        📌 Modo local: las dedicatorias solo se guardan en este dispositivo.
+        Configura Supabase en <code>js/config.js</code> para compartirlas con todos.
+      </p>
+      <form class="dedicatoria-form" id="dedicatoria-form">
+        <label class="campo">
+          <span>Tu nombre</span>
+          <input type="text" name="nombre" maxlength="40" required autocomplete="name" placeholder="¿Quién eres?">
+        </label>
+        <label class="campo">
+          <span>Tu dedicatoria</span>
+          <textarea name="texto" maxlength="500" required rows="4" placeholder="Escribe algo bonito (o una broma interna, también vale)…"></textarea>
+        </label>
+        <button class="boton boton-principal" type="submit">Pegar en el muro 📌</button>
+      </form>
+      <div class="notas" id="notas" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="pie-pagina">
+    <p class="contador" id="contador"></p>
+    <button class="boton boton-secundario" id="recuerdo-aleatorio" type="button">🎲 Recuerdo aleatorio</button>
+    <p class="creditos">Hecha con 💛 por y para nosotros · Promoción <span id="anio-promo"></span></p>
+  </footer>
+
+  <noscript>
+    <p style="text-align:center;padding:2rem">
+      Esta galería necesita JavaScript para mostrar las fotos. Actívalo en tu navegador. 💛
+    </p>
+  </noscript>
+
+  <script src="js/config.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
