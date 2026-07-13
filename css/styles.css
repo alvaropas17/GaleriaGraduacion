@@ -141,6 +141,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -542,7 +543,7 @@ img {
   align-items: center;
   gap: 0.3em;
   padding: 0.25em 0.7em;
-  min-height: 36px;
+  min-height: 44px;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, var(--tinta) 18%, transparent);
   background: transparent;
@@ -944,6 +945,7 @@ body { background: var(--papel); background-image: none; }
 
 @media (min-width: 720px) { .masonry { grid-template-columns:repeat(3,minmax(0,1fr)); } .polaroid-destacada { grid-column:span 2; } }
 @media (max-width: 680px) { .hero { min-height: 47rem; padding:.75rem; } .hero-foto, .hero-velo { inset:.75rem; width:calc(100% - 1.5rem); height:18rem; border-radius:1rem; } .hero-contenido { top:16rem; left:1.35rem; right:1.35rem; translate:0; width:auto; padding:1.35rem; } .hero-titulo { font-size:clamp(3rem,14vw,4.4rem); } .hero-acciones { display:grid; } .hero-acciones .boton { text-align:center; } .hero-flecha { display:none; } .hero-forma-azul { left:auto; right:1rem; bottom:.75rem; width:7rem; height:4rem; } .hero-forma-rosa { width:3.5rem; height:3.5rem; right:1rem; top:1rem; } .tira-negativos { padding-left:1rem; } .capitulo { padding-inline:1rem; } }
+@media (max-width: 480px) { .masonry { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .negativo, .polaroid { transition:none; } }
 
 /* Ajuste de composición: la información no se superpone a las personas. */
