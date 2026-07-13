@@ -11,9 +11,23 @@
   const countEl = document.getElementById('gallery-count');
 
   applyHeroTexts();
+  setupScrollTop();
   loadPhotos()
     .then(renderGallery)
     .catch(showError);
+
+  /* Botón flotante para volver arriba: aparece tras bajar un poco */
+  function setupScrollTop() {
+    const btn = document.getElementById('scroll-top');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    const toggle = () => btn.classList.toggle('show', window.scrollY > 700);
+    window.addEventListener('scroll', toggle, { passive: true });
+    toggle();
+  }
 
   function applyHeroTexts() {
     const h = cfg.hero || {};
@@ -54,6 +68,7 @@
         .join(', ');
       const mid = img.thumbs && (img.thumbs['800'] || entries[entries.length - 1][1]);
       return {
+        id: 'local:' + img.file,
         thumb: mid ? 'images/' + encodePath(mid) : original,
         srcset,
         full: original,
@@ -90,6 +105,7 @@
       const id = `v${r.version}/${r.public_id}.${r.format}`;
       const t = (tr) => `${base}/image/upload/${tr}/${id}`;
       return {
+        id: 'img:' + r.public_id,
         type: 'image',
         thumb: t('f_auto,q_auto,c_limit,w_800'),
         srcset: [400, 800, 1200]
@@ -109,6 +125,7 @@
       const poster = (tr) => `${base}/video/upload/${tr}/${id}.jpg`;
       const t = (tr) => `${base}/video/upload/${tr}/${id}.${r.format}`;
       return {
+        id: 'vid:' + r.public_id,
         type: 'video',
         thumb: poster('so_0,f_jpg,q_auto,c_limit,w_800'),
         srcset: [400, 800, 1200]
@@ -138,57 +155,156 @@
     }
   }
 
+  /* Estado de la galería: fotos, filtro activo y utilidades de la barra */
+  let allPhotos = [];
+  let filter = 'all'; // 'all' | 'favs'
+
+  const toolbar = document.getElementById('gallery-toolbar');
+  const emptyEl = document.getElementById('gallery-empty');
+  const filterAllBtn = document.getElementById('filter-all');
+  const filterFavsBtn = document.getElementById('filter-favs');
+  const favCountEl = document.getElementById('fav-count');
+  const slideshowBtn = document.getElementById('slideshow-btn');
+
   function renderGallery(photos) {
     if (!photos.length) {
       throw new Error('Todavía no hay fotos en la galería.');
     }
+    allPhotos = photos;
     status.hidden = true;
     countEl.textContent = photos.length + (photos.length === 1 ? ' foto' : ' fotos');
+    if (toolbar) toolbar.hidden = false;
+
+    setupToolbar();
+    updateFavCount();
+    paint();
+
+    /* Mantener sincronizados los corazones y el contador al cambiar favoritos */
+    window.Favorites.onChange((id) => {
+      updateFavCount();
+      grid.querySelectorAll('.fav-toggle[data-id]').forEach((btn) => {
+        if (btn.dataset.id === id) updateHeart(btn);
+      });
+      if (filter === 'favs') paint();
+    });
+  }
+
+  function setupToolbar() {
+    if (!toolbar) return;
+    filterAllBtn.addEventListener('click', () => setFilter('all'));
+    filterFavsBtn.addEventListener('click', () => setFilter('favs'));
+    slideshowBtn.addEventListener('click', () => {
+      const list = visiblePhotos();
+      if (list.length) window.Lightbox.open(list, 0, { slideshow: true });
+    });
+  }
+
+  function setFilter(next) {
+    filter = next;
+    filterAllBtn.classList.toggle('is-active', next === 'all');
+    filterAllBtn.setAttribute('aria-pressed', String(next === 'all'));
+    filterFavsBtn.classList.toggle('is-active', next === 'favs');
+    filterFavsBtn.setAttribute('aria-pressed', String(next === 'favs'));
+    paint();
+  }
+
+  function visiblePhotos() {
+    return filter === 'favs'
+      ? allPhotos.filter((p) => window.Favorites.has(p.id))
+      : allPhotos;
+  }
+
+  function updateFavCount() {
+    const n = window.Favorites.count();
+    if (favCountEl) favCountEl.textContent = n;
+    if (filterFavsBtn) filterFavsBtn.classList.toggle('has-favs', n > 0);
+  }
+
+  /* Pinta el grid con las fotos que correspondan al filtro activo */
+  function paint() {
+    const list = visiblePhotos();
+    grid.textContent = '';
+
+    if (!list.length) {
+      grid.hidden = true;
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    grid.hidden = false;
+    if (emptyEl) emptyEl.hidden = true;
 
     const revealer = makeRevealer();
+    list.forEach((photo, i) => grid.appendChild(buildCell(photo, list, i, revealer)));
+  }
 
-    photos.forEach((photo, i) => {
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'gallery-item';
-      item.setAttribute('aria-label', (photo.type === 'video' ? 'Reproducir vídeo: ' : 'Ampliar foto: ') + photo.alt);
-      if (photo.color) item.style.backgroundColor = photo.color;
-      if (photo.width && photo.height) {
-        item.style.aspectRatio = `${photo.width} / ${photo.height}`;
-      }
+  /* Construye una celda: botón-imagen + botón de favorito superpuesto */
+  function buildCell(photo, list, i, revealer) {
+    const cell = document.createElement('figure');
+    cell.className = 'gallery-cell';
+    if (photo.color) cell.style.backgroundColor = photo.color;
+    if (photo.width && photo.height) {
+      cell.style.aspectRatio = `${photo.width} / ${photo.height}`;
+    }
 
-      const img = document.createElement('img');
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.alt = photo.alt;
-      if (photo.srcset) {
-        img.srcset = photo.srcset;
-        img.sizes = '(max-width: 640px) 100vw, (max-width: 1000px) 50vw, (max-width: 1320px) 33vw, 25vw';
-      }
-      img.src = photo.thumb;
-      if (img.complete) img.classList.add('loaded');
-      else img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'gallery-item';
+    item.setAttribute('aria-label', (photo.type === 'video' ? 'Reproducir vídeo: ' : 'Ampliar foto: ') + photo.alt);
 
-      let hint;
-      if (photo.type === 'video') {
-        hint = document.createElement('span');
-        hint.className = 'play-badge';
-        hint.setAttribute('aria-hidden', 'true');
-        hint.innerHTML =
-          '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(6,13,31,0.55)"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor"/></svg>';
-      } else {
-        hint = document.createElement('span');
-        hint.className = 'zoom-hint';
-        hint.setAttribute('aria-hidden', 'true');
-        hint.innerHTML =
-          '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
-      }
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = photo.alt;
+    if (photo.srcset) {
+      img.srcset = photo.srcset;
+      img.sizes = '(max-width: 640px) 100vw, (max-width: 1000px) 50vw, (max-width: 1320px) 33vw, 25vw';
+    }
+    img.src = photo.thumb;
+    if (img.complete) img.classList.add('loaded');
+    else img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
 
-      item.append(img, hint);
-      item.addEventListener('click', () => window.Lightbox.open(photos, i));
-      grid.appendChild(item);
-      revealer(item);
+    let hint;
+    if (photo.type === 'video') {
+      hint = document.createElement('span');
+      hint.className = 'play-badge';
+      hint.setAttribute('aria-hidden', 'true');
+      hint.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(6,13,31,0.55)"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor"/></svg>';
+    } else {
+      hint = document.createElement('span');
+      hint.className = 'zoom-hint';
+      hint.setAttribute('aria-hidden', 'true');
+      hint.innerHTML =
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+    }
+
+    item.append(img, hint);
+    item.addEventListener('click', () => window.Lightbox.open(list, i));
+
+    const fav = document.createElement('button');
+    fav.type = 'button';
+    fav.className = 'fav-toggle';
+    fav.dataset.id = photo.id;
+    fav.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const active = window.Favorites.toggle(photo.id);
+      window.toast(active ? 'Añadida a favoritas ♥' : 'Quitada de favoritas');
     });
+    updateHeart(fav);
+
+    cell.append(item, fav);
+    revealer(cell);
+    return cell;
+  }
+
+  function updateHeart(btn) {
+    const active = window.Favorites.has(btn.dataset.id);
+    btn.classList.toggle('is-fav', active);
+    btn.setAttribute('aria-pressed', String(active));
+    btn.setAttribute('aria-label', active ? 'Quitar de favoritas' : 'Marcar como favorita');
+    btn.innerHTML = active
+      ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.9-10-9.3C.4 8.6 1.9 5 5.2 5c2 0 3.3 1.1 4.1 2.2C10.1 6.1 11.4 5 13.4 5c3.3 0 4.8 3.6 3.2 6.7C18.9 16.1 12 21 12 21z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 6.6a5 5 0 0 0-7.1 0L12 8.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-7.3a5 5 0 0 0 0-7.1z"/></svg>';
   }
 
   /* Anima la aparición de cada foto al entrar en pantalla */

@@ -17,12 +17,24 @@
   const prevBtn = document.getElementById('lb-prev');
   const nextBtn = document.getElementById('lb-next');
   const hint = document.getElementById('lb-hint');
+  const favBtn = document.getElementById('lb-fav');
+  const shareBtn = document.getElementById('lb-share');
+  const playBtn = document.getElementById('lb-play');
+  const progress = document.getElementById('lb-progress');
 
   const MAX_ZOOM = 5;
+  const SLIDE_IMAGE_MS = 4500;
+  const SLIDE_VIDEO_MS = 8000;
   let photos = [];
   let index = 0;
   let lastFocus = null;
   let hintShown = false;
+
+  /* Estado del pase de diapositivas */
+  let playing = false;
+  let slideRAF = null;
+  let slideStart = 0;
+  let slideDuration = SLIDE_IMAGE_MS;
 
   /* Estado de zoom/arrastre */
   let scale = 1;
@@ -35,12 +47,15 @@
 
   window.Lightbox = { open, close };
 
-  function open(list, i) {
+  function open(list, i, opts) {
+    opts = opts || {};
     photos = list;
     lastFocus = document.activeElement;
     root.hidden = false;
     document.body.style.overflow = 'hidden';
     show(i);
+    if (opts.slideshow) startSlideshow();
+    else stopSlideshow();
     closeBtn.focus();
     if (!hintShown) {
       hintShown = true;
@@ -52,6 +67,7 @@
   }
 
   function close() {
+    stopSlideshow();
     root.hidden = true;
     document.body.style.overflow = '';
     img.removeAttribute('src');
@@ -89,10 +105,99 @@
     counter.textContent = `${index + 1} / ${photos.length}`;
     downloadBtn.href = photo.download;
     downloadBtn.setAttribute('download', suggestFilename(photo));
+    updateFavButton();
+
+    if (playing) armSlide();
 
     preload(index + 1);
     preload(index - 1);
   }
+
+  /* ---------------- Favorito ---------------- */
+
+  function updateFavButton() {
+    if (!favBtn) return;
+    const active = window.Favorites && window.Favorites.has(photos[index].id);
+    favBtn.classList.toggle('is-fav', !!active);
+    favBtn.setAttribute('aria-pressed', String(!!active));
+    favBtn.setAttribute('aria-label', active ? 'Quitar de favoritas' : 'Marcar como favorita');
+  }
+
+  if (favBtn) {
+    favBtn.addEventListener('click', () => {
+      if (!window.Favorites) return;
+      const active = window.Favorites.toggle(photos[index].id);
+      updateFavButton();
+      window.toast(active ? 'Añadida a favoritas ♥' : 'Quitada de favoritas');
+    });
+  }
+
+  /* ---------------- Compartir ---------------- */
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      const photo = photos[index];
+      const url = new URL(photo.download || photo.full, location.href).href;
+      const data = { title: document.title, text: 'Mira esta foto de la graduación', url };
+      if (navigator.share) {
+        try { await navigator.share(data); } catch (_) { /* cancelado por el usuario */ }
+      } else if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(url);
+          window.toast('Enlace copiado al portapapeles');
+        } catch (_) {
+          window.toast('No se pudo copiar el enlace');
+        }
+      } else {
+        window.open(url, '_blank', 'noopener');
+      }
+    });
+  }
+
+  /* ---------------- Pase de diapositivas ---------------- */
+
+  function startSlideshow() {
+    if (!playBtn) return;
+    playing = true;
+    playBtn.classList.add('is-playing');
+    playBtn.setAttribute('aria-label', 'Pausar pase de diapositivas');
+    hint.classList.add('fade');
+    armSlide();
+  }
+
+  function stopSlideshow() {
+    playing = false;
+    cancelAnimationFrame(slideRAF);
+    if (playBtn) {
+      playBtn.classList.remove('is-playing');
+      playBtn.setAttribute('aria-label', 'Iniciar pase de diapositivas');
+    }
+    if (progress) progress.style.width = '0%';
+  }
+
+  function toggleSlideshow() {
+    if (playing) stopSlideshow();
+    else startSlideshow();
+  }
+
+  /* Programa el avance a la siguiente foto animando la barra de progreso */
+  function armSlide() {
+    cancelAnimationFrame(slideRAF);
+    const photo = photos[index];
+    slideDuration = photo.type === 'video' ? SLIDE_VIDEO_MS : SLIDE_IMAGE_MS;
+    slideStart = performance.now();
+    if (photo.type === 'video') { try { video.play(); } catch (_) {} }
+
+    const tick = (now) => {
+      const p = Math.min(1, (now - slideStart) / slideDuration);
+      if (progress) progress.style.width = (p * 100) + '%';
+      if (p >= 1) show(index + 1); // show() vuelve a llamar a armSlide()
+      else slideRAF = requestAnimationFrame(tick);
+    };
+    slideRAF = requestAnimationFrame(tick);
+  }
+
+  if (playBtn) playBtn.addEventListener('click', toggleSlideshow);
 
   function onLoaded() {
     spinner.hidden = true;
@@ -126,6 +231,8 @@
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowLeft') show(index - 1);
     else if (e.key === 'ArrowRight') show(index + 1);
+    else if (e.key === 'f' || e.key === 'F') { if (favBtn) favBtn.click(); }
+    else if (e.key === ' ') { e.preventDefault(); toggleSlideshow(); }
   });
 
   /* ---------------- Zoom y gestos ---------------- */

@@ -2,6 +2,13 @@
 
 Web estática con una galería de fotos para la graduación: portada animada, grid responsive con carga perezosa, visor a pantalla completa con zoom y descarga de originales. Tema azul marino + dorado.
 
+**Funciones para quien la visita:**
+
+- ♥ **Favoritos** — marca tus fotos preferidas con el corazón; se guardan en tu propio navegador (no requiere cuenta ni servidor) y puedes filtrar para ver solo esas.
+- ▶ **Pase de diapositivas** — reproduce todas las fotos en automático con barra de progreso (tecla espacio para pausar/reanudar).
+- 🔗 **Compartir** — comparte una foto con el menú nativo del móvil o copiando el enlace.
+- ⬇ **Descargar** el original a máxima calidad, ↑ **volver arriba** y avisos discretos al interactuar.
+
 **Lo importante:** para añadir fotos **no hace falta tocar el código**. Hay dos modos, y eliges cuál usar con una sola línea en `js/config.js`.
 
 ## Puesta en marcha (GitHub Pages)
@@ -67,8 +74,9 @@ index.html                    Portada + galería
 subir.html                    Página de subida (modo Cloudinary, no enlazada)
 css/styles.css                Tema y responsive
 js/config.js                  ⚙️ ÚNICO archivo a editar para personalizar
-js/gallery.js                 Carga y pinta el grid
-js/lightbox.js                Visor: zoom, gestos, descarga
+js/app-utils.js               Favoritos (localStorage) + avisos (toasts)
+js/gallery.js                 Carga y pinta el grid, filtro y barra de herramientas
+js/lightbox.js                Visor: zoom, gestos, favorito, compartir, slideshow
 images/                       Originales (modo repositorio)
 images/thumbs/ + manifest     Generados automáticamente — no editar a mano
 scripts/generate-manifest.mjs Generador de miniaturas (sharp)

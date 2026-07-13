@@ -224,16 +224,13 @@ body {
   column-gap: 1.1rem;
 }
 
-.gallery-item {
+/* Celda: contenedor de cada foto (mantiene el layout masonry y aloja el
+   botón de favorito como hermano del botón-imagen, evitando anidar botones). */
+.gallery-cell {
   position: relative;
-  display: block;
-  width: 100%;
   margin: 0 0 1.1rem;
-  padding: 0;
-  border: 0;
   border-radius: var(--radius);
   overflow: hidden;
-  cursor: zoom-in;
   background-color: var(--navy-700);
   box-shadow: var(--shadow);
   break-inside: avoid;
@@ -242,14 +239,29 @@ body {
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
-.gallery-item.visible { opacity: 1; transform: translateY(0); }
+.gallery-cell.visible { opacity: 1; transform: translateY(0); }
 
-.gallery-item:hover,
-.gallery-item:focus-visible {
+.gallery-cell:hover,
+.gallery-cell:focus-within {
   box-shadow: 0 14px 40px rgba(3, 7, 18, 0.7), 0 0 0 1px rgba(217, 169, 75, 0.55);
 }
 
-.gallery-item:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.gallery-item {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.gallery-item:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -3px;
+  border-radius: var(--radius);
+}
 
 .gallery-item img {
   display: block;
@@ -261,7 +273,7 @@ body {
 
 .gallery-item img.loaded { opacity: 1; }
 
-.gallery-item:hover img { transform: scale(1.035); }
+.gallery-cell:hover .gallery-item img { transform: scale(1.035); }
 
 .gallery-item .zoom-hint {
   position: absolute;
@@ -283,7 +295,7 @@ body {
 
 @media (hover: hover) {
   .gallery-item .zoom-hint { opacity: 0; }
-  .gallery-item:hover .zoom-hint { opacity: 1; }
+  .gallery-cell:hover .zoom-hint { opacity: 1; }
 }
 
 .gallery-item .play-badge {
@@ -300,6 +312,140 @@ body {
   filter: drop-shadow(0 2px 10px rgba(3, 7, 18, 0.7));
   color: rgba(242, 236, 224, 0.92);
 }
+
+/* Botón de favorito superpuesto en cada foto */
+.fav-toggle {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(6, 13, 31, 0.55);
+  color: var(--cream);
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s, background 0.25s, color 0.25s, transform 0.15s;
+}
+
+.fav-toggle svg { width: 20px; height: 20px; }
+.fav-toggle:hover { background: rgba(6, 13, 31, 0.8); color: var(--gold-soft); }
+.fav-toggle:active { transform: scale(0.88); }
+.fav-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.fav-toggle.is-fav { color: #ff7a8a; }
+.fav-toggle.is-fav:hover { color: #ff8f9c; }
+
+/* En pantallas con ratón, el corazón sin marcar se atenúa hasta el hover;
+   los que ya son favoritos permanecen siempre visibles. */
+@media (hover: hover) {
+  .fav-toggle { opacity: 0; }
+  .gallery-cell:hover .fav-toggle,
+  .fav-toggle:focus-visible,
+  .fav-toggle.is-fav { opacity: 1; }
+}
+
+@keyframes fav-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.fav-toggle.is-fav svg { animation: fav-pop 0.35s ease; }
+
+/* --------------------------------------------------------------------------
+   Barra de herramientas de la galería (filtro + slideshow)
+   -------------------------------------------------------------------------- */
+
+.gallery-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem 1rem;
+  margin: 0 auto 2.5rem;
+}
+
+.gallery-toolbar[hidden] { display: none; }
+
+.seg {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 99px;
+  background: rgba(20, 38, 63, 0.5);
+  border: 1px solid rgba(217, 169, 75, 0.18);
+}
+
+.seg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: var(--cream-dim);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.seg-btn:hover { color: var(--cream); }
+.seg-btn.is-active { background: var(--gold); color: var(--navy-900); font-weight: 500; }
+.seg-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.seg-count {
+  min-width: 1.5em;
+  padding: 0 0.35em;
+  border-radius: 99px;
+  background: rgba(6, 13, 31, 0.25);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.seg-btn.is-active .seg-count { background: rgba(6, 13, 31, 0.2); }
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.3rem;
+  border: 1px solid rgba(217, 169, 75, 0.35);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--gold-soft);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+}
+
+.tool-btn:hover {
+  background: rgba(217, 169, 75, 0.12);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.tool-btn:active { transform: scale(0.97); }
+.tool-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.gallery-empty {
+  max-width: 30rem;
+  margin: 1rem auto 3rem;
+  padding: 2rem 1.5rem;
+  border: 1px dashed rgba(217, 169, 75, 0.3);
+  border-radius: 14px;
+  text-align: center;
+  color: var(--cream-dim);
+  line-height: 1.7;
+}
+
+.gallery-empty[hidden] { display: none; }
 
 .gallery-status {
   display: flex;
@@ -458,6 +604,39 @@ body {
 
 .lb-btn:hover { background: var(--navy-600); color: var(--gold-soft); }
 .lb-btn:active { transform: scale(0.92); }
+.lb-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Botón de favorito del visor: alterna corazón contorno / relleno */
+.lb-fav .heart-fill { display: none; }
+.lb-fav.is-fav { color: #ff7a8a; }
+.lb-fav.is-fav:hover { color: #ff8f9c; }
+.lb-fav.is-fav .heart-outline { display: none; }
+.lb-fav.is-fav .heart-fill { display: block; animation: fav-pop 0.35s ease; }
+
+/* Botón de pase de diapositivas: alterna play / pausa */
+#lb-play .icon-pause { display: none; }
+#lb-play.is-playing .icon-play { display: none; }
+#lb-play.is-playing .icon-pause { display: block; }
+#lb-play.is-playing { background: var(--gold); color: var(--navy-900); }
+
+/* Barra de progreso del pase de diapositivas */
+.lb-progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+  background: rgba(242, 236, 224, 0.12);
+  pointer-events: none;
+}
+
+.lb-progress {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--gold);
+}
 
 .lb-nav {
   position: absolute;
@@ -591,6 +770,62 @@ body {
 .upload-back a:hover { color: var(--gold); }
 
 /* --------------------------------------------------------------------------
+   Botón "volver arriba"
+   -------------------------------------------------------------------------- */
+
+.scroll-top {
+  position: fixed;
+  right: max(1.1rem, env(safe-area-inset-right));
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(217, 169, 75, 0.35);
+  border-radius: 50%;
+  background: rgba(13, 27, 42, 0.85);
+  color: var(--gold-soft);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow);
+  transition: opacity 0.3s, transform 0.3s, background 0.25s, color 0.25s;
+}
+
+.scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.scroll-top:hover { background: var(--navy-600); color: var(--gold); }
+.scroll-top:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* --------------------------------------------------------------------------
+   Toast (aviso flotante breve)
+   -------------------------------------------------------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  z-index: 200;
+  max-width: min(90vw, 26rem);
+  padding: 0.7rem 1.2rem;
+  border-radius: 99px;
+  background: rgba(13, 27, 42, 0.95);
+  border: 1px solid rgba(217, 169, 75, 0.35);
+  color: var(--cream);
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* --------------------------------------------------------------------------
    Accesibilidad: reducir movimiento
    -------------------------------------------------------------------------- */
 
@@ -598,7 +833,9 @@ body {
   html { scroll-behavior: auto; }
   .hero-content, .hero-scroll, .lb-img, .lb-video, .lb-backdrop { animation: none; }
   .hero-scroll-arrow { animation: none; }
-  .gallery-item { opacity: 1; transform: none; transition: box-shadow 0.35s ease; }
+  .gallery-cell { opacity: 1; transform: none; transition: box-shadow 0.35s ease; }
   .gallery-item img { transition: opacity 0.3s ease; }
-  .gallery-item:hover img { transform: none; }
+  .gallery-cell:hover .gallery-item img { transform: none; }
+  .fav-toggle.is-fav svg,
+  .lb-fav.is-fav .heart-fill { animation: none; }
 }
