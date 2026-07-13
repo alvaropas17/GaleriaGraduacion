@@ -4,9 +4,8 @@
 import { renderHero, renderGaleria } from "./gallery.js";
 import { initLightbox, abrirRecuerdo } from "./lightbox.js";
 import { initReacciones } from "./reactions.js";
-import { initDedicatorias } from "./guestbook.js";
 import { initMapa } from "./map.js";
-import { initRevelado, initContador, initRecuerdoAleatorio } from "./extras.js";
+import { initRevelado, initContador, initRecuerdoAleatorio, initParallax } from "./extras.js";
 import { initZoomDensidad } from "./zoom.js";
 import { initFondoTematico } from "./temas.js";
 
@@ -37,9 +36,9 @@ async function arrancar() {
   initRecuerdoAleatorio(fotos.length, abrirRecuerdo);
   initMapa(fotos, manifest);
   initReacciones();
-  initDedicatorias();
   initZoomDensidad();
   initFondoTematico();
+  initParallax();
 }
 
 arrancar().catch((err) => {

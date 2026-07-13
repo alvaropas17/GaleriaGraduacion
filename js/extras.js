@@ -18,7 +18,7 @@ export function initRevelado() {
         }
       }
     },
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
   );
   elementos.forEach((el) => observador.observe(el));
 }
@@ -31,14 +31,30 @@ export function initContador(fechaGraduacion) {
   }
   const fecha = new Date(`${fechaGraduacion}T00:00:00`);
   const dias = Math.floor((Date.now() - fecha.getTime()) / 86400000);
-  if (dias > 0) {
-    elemento.textContent = `Hace ${dias} ${dias === 1 ? "día" : "días"} que nos graduamos 🎓`;
-  } else if (dias === 0) {
-    elemento.textContent = "¡Hoy es el gran día! 🎓";
-  } else {
-    const faltan = -dias;
-    elemento.textContent = `${faltan} ${faltan === 1 ? "día" : "días"} para la graduación 🎓`;
-  }
+  // if (dias > 0) {
+  //   elemento.textContent = `Hace ${dias} ${dias === 1 ? "día" : "días"} que nos graduamos 🎓`;
+  // } else if (dias === 0) {
+  //   elemento.textContent = "¡Hoy es el gran día! 🎓";
+  // } else {
+  //   const faltan = -dias;
+  //   elemento.textContent = `${faltan} ${faltan === 1 ? "día" : "días"} para la graduación 🎓`;
+  // }
+}
+
+export function initParallax() {
+  const img = document.getElementById("hero-foto");
+  if (!img) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        img.style.transform = `translateY(${window.scrollY * 0.35}px)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 export function initRecuerdoAleatorio(totalFotos, abrirFoto) {

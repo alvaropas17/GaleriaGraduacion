@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,54 +9,56 @@
   <meta name="theme-color" content="#FFF9EE">
   <title>La RUM · Promoción 2026</title>
   <meta name="description" content="Nuestra galería de recuerdos. Hecha por y para la pandilla.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <link rel="preload" href="assets/fonts/caveat-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="js/vendor/photoswipe/photoswipe.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
   <!-- Fondo ilustrado que cambia según el tema de las fotos visibles -->
   <div class="fondo-tematico" aria-hidden="true">
     <span class="fondo-tema fondo-tema-playa fondo-tema-activo" data-fondo-tema="playa">
       <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <circle cx="330" cy="70" r="42" fill="var(--mostaza)"/>
-        <path d="M0 210 Q50 190 100 210 T200 210 T300 210 T400 210 V400 H0 Z" fill="var(--washi-azul)"/>
-        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--azul)"/>
-        <path d="M40 130 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M90 150 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="330" cy="70" r="42" fill="var(--mostaza)" />
+        <path d="M0 210 Q50 190 100 210 T200 210 T300 210 T400 210 V400 H0 Z" fill="var(--washi-azul)" />
+        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--azul)" />
+        <path d="M40 130 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round" />
+        <path d="M90 150 q18-22 36 0" fill="none" stroke="var(--tinta-suave)" stroke-width="4" stroke-linecap="round" />
       </svg>
     </span>
     <span class="fondo-tema fondo-tema-voley" data-fondo-tema="voley">
       <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--mostaza)"/>
-        <line x1="200" y1="60" x2="200" y2="260" stroke="var(--tinta-suave)" stroke-width="5"/>
-        <line x1="120" y1="90" x2="280" y2="90" stroke="var(--tinta-suave)" stroke-width="5"/>
-        <path d="M120 90 L120 150 M150 90 L150 150 M180 90 L180 150 M210 90 L210 150 M240 90 L240 150 M270 90 L270 150" stroke="var(--tinta-suave)" stroke-width="2" opacity=".55"/>
-        <circle cx="300" cy="150" r="26" fill="var(--washi-rosa)" stroke="var(--tinta-suave)" stroke-width="3"/>
+        <path d="M0 260 Q60 235 120 260 T240 260 T360 260 T400 258 V400 H0 Z" fill="var(--mostaza)" />
+        <line x1="200" y1="60" x2="200" y2="260" stroke="var(--tinta-suave)" stroke-width="5" />
+        <line x1="120" y1="90" x2="280" y2="90" stroke="var(--tinta-suave)" stroke-width="5" />
+        <path d="M120 90 L120 150 M150 90 L150 150 M180 90 L180 150 M210 90 L210 150 M240 90 L240 150 M270 90 L270 150"
+          stroke="var(--tinta-suave)" stroke-width="2" opacity=".55" />
+        <circle cx="300" cy="150" r="26" fill="var(--washi-rosa)" stroke="var(--tinta-suave)" stroke-width="3" />
       </svg>
     </span>
     <span class="fondo-tema fondo-tema-noche" data-fondo-tema="noche">
       <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <rect width="400" height="400" fill="#22344a"/>
-        <circle cx="320" cy="80" r="34" fill="var(--mostaza)"/>
-        <circle cx="60" cy="60" r="3" fill="#fff9ee"/>
-        <circle cx="140" cy="110" r="2.4" fill="#fff9ee"/>
-        <circle cx="220" cy="50" r="2" fill="#fff9ee"/>
-        <circle cx="90" cy="160" r="2.6" fill="#fff9ee"/>
-        <circle cx="260" cy="140" r="2" fill="#fff9ee"/>
-        <circle cx="180" cy="190" r="2.2" fill="#fff9ee"/>
+        <rect width="400" height="400" fill="#22344a" />
+        <circle cx="320" cy="80" r="34" fill="var(--mostaza)" />
+        <circle cx="60" cy="60" r="3" fill="#fff9ee" />
+        <circle cx="140" cy="110" r="2.4" fill="#fff9ee" />
+        <circle cx="220" cy="50" r="2" fill="#fff9ee" />
+        <circle cx="90" cy="160" r="2.6" fill="#fff9ee" />
+        <circle cx="260" cy="140" r="2" fill="#fff9ee" />
+        <circle cx="180" cy="190" r="2.2" fill="#fff9ee" />
       </svg>
     </span>
   </div>
 
   <!-- Portada -->
   <header class="hero" id="inicio">
-    <img class="hero-foto" id="hero-foto" alt="" aria-hidden="true">
+    <img class="hero-foto" id="hero-foto"
+      src="photos/mallorca2025/mallorca-foto-grupal-mejorada(1)-sin-marca.png"
+      alt="Foto de grupo el día de la graduación" fetchpriority="high">
     <div class="hero-velo"></div>
     <span class="hero-forma hero-forma-azul" aria-hidden="true"></span>
     <span class="hero-forma hero-forma-rosa" aria-hidden="true"></span>
@@ -70,7 +73,8 @@
     <nav class="tira-negativos" id="navegacion-capitulos" aria-label="Saltar a un capítulo"></nav>
     <section class="ficha-album" id="ficha-album" aria-label="Índice del álbum" hidden></section>
     <div class="zoom-densidad" id="zoom-densidad" role="group" aria-label="Tamaño de las fotos en la galería">
-      <button type="button" class="zoom-boton" id="zoom-menos" aria-label="Ver fotos más grandes (menos por fila)">−</button>
+      <button type="button" class="zoom-boton" id="zoom-menos"
+        aria-label="Ver fotos más grandes (menos por fila)">−</button>
       <span class="zoom-niveles" aria-hidden="true"><i></i><i></i><i></i></span>
       <button type="button" class="zoom-boton" id="zoom-mas" aria-label="Ver más fotos por fila">+</button>
       <span class="zoom-anuncio" id="zoom-anuncio" aria-live="polite"></span>
@@ -80,7 +84,10 @@
 
     <!-- Mapa de recuerdos -->
     <section class="seccion banda-kraft mapa-seccion revelar" id="mapa-seccion" hidden>
-      <svg class="rasgado" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 20 L55 10 110 22 170 8 230 18 300 6 355 22 430 10 485 24 570 9 630 21 705 12 765 24 835 8 905 20 985 11 1045 23 1125 10 1185 22 1265 12 1325 24 1395 13 1440 20 L1440 36 0 36 Z"/></svg>
+      <svg class="rasgado" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path fill="currentColor"
+          d="M0 20 L55 10 110 22 170 8 230 18 300 6 355 22 430 10 485 24 570 9 630 21 705 12 765 24 835 8 905 20 985 11 1045 23 1125 10 1185 22 1265 12 1325 24 1395 13 1440 20 L1440 36 0 36 Z" />
+      </svg>
       <div class="seccion-interior">
         <header class="seccion-cabecera">
           <p class="seccion-etiqueta">Los lugares</p>
@@ -90,38 +97,13 @@
         <div id="mapa" class="mapa" role="region" aria-label="Mapa con los lugares de las fotos"></div>
       </div>
     </section>
-
-    <!-- Muro de dedicatorias -->
-    <section class="seccion dedicatorias revelar" id="dedicatorias">
-      <svg class="rasgado" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 24 L60 12 115 25 175 9 235 21 305 7 360 23 435 11 490 26 575 10 635 22 710 13 770 25 840 9 910 21 990 12 1050 24 1130 11 1190 23 1270 13 1330 25 1400 14 1440 21 L1440 36 0 36 Z"/></svg>
-      <div class="seccion-interior">
-        <header class="seccion-cabecera">
-          <p class="seccion-etiqueta">Para el recuerdo</p>
-          <h2 class="seccion-titulo">Muro de dedicatorias</h2>
-          <p class="seccion-texto">Deja aquí lo que quieras decirle a la panda. Sin registros ni cuentas: escribe y listo.</p>
-        </header>
-        <p class="aviso-local" id="aviso-local" hidden>
-          📌 Modo local: las dedicatorias solo se guardan en este dispositivo.
-          Configura Supabase en <code>js/config.js</code> para compartirlas con todos.
-        </p>
-        <form class="dedicatoria-form" id="dedicatoria-form">
-          <label class="campo">
-            <span>Tu nombre</span>
-            <input type="text" name="nombre" maxlength="40" required autocomplete="name" placeholder="¿Quién eres?">
-          </label>
-          <label class="campo">
-            <span>Tu dedicatoria</span>
-            <textarea name="texto" maxlength="500" required rows="4" placeholder="Escribe algo bonito (o una broma interna, también vale)…"></textarea>
-          </label>
-          <button class="boton boton-principal" type="submit">Pegar en el muro 📌</button>
-        </form>
-        <div class="notas" id="notas" aria-live="polite"></div>
-      </div>
-    </section>
   </main>
 
   <footer class="pie-pagina">
-    <svg class="rasgado" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 22 L50 9 105 23 165 8 225 20 295 7 350 21 425 9 480 25 565 10 625 22 700 12 760 24 830 8 900 20 980 11 1040 23 1120 10 1180 22 1260 12 1320 24 1390 14 1440 22 L1440 36 0 36 Z"/></svg>
+    <svg class="rasgado" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path fill="currentColor"
+        d="M0 22 L50 9 105 23 165 8 225 20 295 7 350 21 425 9 480 25 565 10 625 22 700 12 760 24 830 8 900 20 980 11 1040 23 1120 10 1180 22 1260 12 1320 24 1390 14 1440 22 L1440 36 0 36 Z" />
+    </svg>
     <div class="pie-interior">
       <p class="contador sello" id="contador"></p>
       <button class="boton boton-secundario" id="recuerdo-aleatorio" type="button">🎲 Recuerdo aleatorio</button>
@@ -138,4 +120,5 @@
   <script src="js/config.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
+
 </html>

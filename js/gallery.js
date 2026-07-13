@@ -7,7 +7,8 @@ const SIZES = "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 94vw";
 const EXTENSIONES_VIDEO = new Set(["mp4", "webm", "mov"]);
 const COLORES_CAPITULO = ["azul", "amarillo", "rosa", "verde", "azul"];
 const NOMBRES_NAVEGACION = {
-  "donde-empezo-todo": "El principio",
+  "donde-empezo-todo": "Mallorca",
+  "los-nietos": "Los Nietos",
   "entre-clase-y-clase": "Entre clases",
   "los-viajes": "Viajes",
   "la-gran-noche": "Graduación"
@@ -47,7 +48,6 @@ function renderFichaAlbum(capitulo, manifest) {
       </ul>
       <div class="ficha-acciones">
         <a class="boton boton-principal" href="#${capitulo.id}">Ver los recuerdos</a>
-        <a class="boton boton-secundario" href="#dedicatorias">Ir a dedicatorias</a>
       </div>
     </div>
     <div class="ficha-miniaturas" aria-label="Tres recuerdos del álbum"></div>
@@ -105,7 +105,7 @@ export function renderGaleria(datos, manifest) {
   const fotosPlanas = [];
   let indiceLightbox = 0;
 
-  const capitulosVisibles = datos.capitulos.filter((capitulo) => capitulo.id === "los-nietos");
+  const capitulosVisibles = datos.capitulos;
   renderNavegacion(capitulosVisibles);
   renderFichaAlbum(capitulosVisibles[0], manifest);
 
@@ -204,7 +204,7 @@ export function renderHero(datos, manifest) {
   document.title = `${datos.titulo} 🎓`;
   document.getElementById("hero-titulo").textContent = datos.titulo;
   document.getElementById("hero-subtitulo").textContent = datos.subtitulo ?? "";
-  const capituloPortada = datos.capitulos?.find((capitulo) => capitulo.id === "los-nietos") ?? datos.capitulos?.[0];
+  const capituloPortada = datos.capitulos?.[0];
   document.getElementById("hero-pie").textContent = capituloPortada
     ? `${capituloPortada.titulo} · ${capituloPortada.texto || "Un álbum para volver cuando queramos."}`
     : "";
