@@ -392,6 +392,8 @@ body {
   max-width: 100%;
   max-height: 100%;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   transform-origin: center center;
   animation: lb-zoom-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: transform;

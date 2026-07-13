@@ -32,6 +32,7 @@
   let pinchStart = null;
   let dragStart = null;
   let lastTap = 0;
+  let lastPointerType = null;
 
   window.Lightbox = { open, close };
 
@@ -178,12 +179,20 @@
 
   stage.addEventListener('dblclick', (e) => {
     if (!video.hidden) return;
+    /* En táctil el zoom lo gestiona el detector de doble toque de abajo;
+       si dejamos actuar también este dblclick sintético, revierte el zoom
+       justo después de aplicarlo. */
+    if (lastPointerType === 'touch') return;
     e.preventDefault();
     zoomAt(e.clientX, e.clientY, scale > 1 ? 1 : 2.5);
   });
 
   stage.addEventListener('pointerdown', (e) => {
     if (e.target.closest('.lb-topbar, .lb-nav') || e.target.closest('video')) return;
+    lastPointerType = e.pointerType;
+    /* Evita que el navegador sintetice click/dblclick de compatibilidad,
+       que si no compiten con el zoom por pellizco/doble toque. */
+    if (e.pointerType === 'touch') e.preventDefault();
     stage.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -225,6 +234,7 @@
 
   function onPointerEnd(e) {
     if (!pointers.has(e.pointerId)) return;
+    if (e.pointerType === 'touch') e.preventDefault();
     pointers.delete(e.pointerId);
     img.classList.remove('dragging');
 
