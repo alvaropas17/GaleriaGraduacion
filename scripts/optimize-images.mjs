@@ -11,11 +11,13 @@
 import sharp from "sharp";
 import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const raiz = new URL("..", import.meta.url).pathname;
+const raiz = fileURLToPath(new URL("..", import.meta.url));
 const dirSalida = path.join(raiz, "assets/img");
 const ANCHOS = [400, 800, 1600];
 const CALIDAD = 78;
+const EXTENSIONES_IMAGEN = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 
 const datos = JSON.parse(await readFile(path.join(raiz, "data/photos.json"), "utf8"));
 await mkdir(dirSalida, { recursive: true });
@@ -38,7 +40,7 @@ function slug(src) {
 
 const fuentes = [
   ...(datos.hero?.src ? [datos.hero.src] : []),
-  ...datos.capitulos.flatMap((c) => c.fotos.map((f) => f.src))
+  ...datos.capitulos.flatMap((c) => c.fotos.filter((f) => EXTENSIONES_IMAGEN.has(path.extname(f.src).toLowerCase())).map((f) => f.src))
 ];
 
 let procesadas = 0;

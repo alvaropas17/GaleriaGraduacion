@@ -80,6 +80,7 @@ async function guardarMensaje(mensaje) {
 function crearNota(mensaje, indice) {
   const nota = document.createElement("article");
   nota.className = "nota";
+  if (indice % 3 === 2) nota.classList.add("nota-cinta", `washi-${(indice % 2) + 1}`);
   nota.style.setProperty("--nota-color", `var(${COLORES[indice % COLORES.length]})`);
   nota.style.setProperty("--rot", `${ROTACIONES[indice % ROTACIONES.length]}deg`);
 

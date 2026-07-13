@@ -9,12 +9,15 @@
  */
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const raiz = new URL("..", import.meta.url).pathname;
+const raiz = fileURLToPath(new URL("..", import.meta.url));
 const rutaDatos = path.join(raiz, "data/photos.json");
 const dirFotos = path.join(raiz, "photos");
 
-const EXTENSIONES = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
+const EXTENSIONES_IMAGEN = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
+const EXTENSIONES_VIDEO = new Set([".mp4", ".webm", ".mov"]);
+const EXTENSIONES = new Set([...EXTENSIONES_IMAGEN, ...EXTENSIONES_VIDEO]);
 
 const datos = JSON.parse(await readFile(rutaDatos, "utf8"));
 const previos = new Map();
@@ -52,7 +55,7 @@ for (const carpeta of carpetas) {
     const src = `photos/${carpeta}/${archivo}`;
     if (previos.has(src)) return previos.get(src);
     nuevas++;
-    return { src, caption: "" };
+    return { src, caption: "", ...(EXTENSIONES_VIDEO.has(path.extname(archivo).toLowerCase()) ? { tipo: "video" } : {}) };
   });
 
   capitulos.push({

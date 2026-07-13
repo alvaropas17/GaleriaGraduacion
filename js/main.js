@@ -2,7 +2,7 @@
  * Punto de entrada: carga los datos, monta la galería y activa cada módulo.
  */
 import { renderHero, renderGaleria } from "./gallery.js";
-import { initLightbox, abrirFoto } from "./lightbox.js";
+import { initLightbox, abrirRecuerdo } from "./lightbox.js";
 import { initReacciones } from "./reactions.js";
 import { initDedicatorias } from "./guestbook.js";
 import { initMapa } from "./map.js";
@@ -29,10 +29,10 @@ async function arrancar() {
   renderHero(datos, manifest);
   const fotos = renderGaleria(datos, manifest);
 
-  initLightbox();
+  initLightbox(fotos);
   initRevelado();
   initContador(datos.fechaGraduacion);
-  initRecuerdoAleatorio(fotos.length, abrirFoto);
+  initRecuerdoAleatorio(fotos.length, abrirRecuerdo);
   initMapa(fotos, manifest);
   initReacciones();
   initDedicatorias();

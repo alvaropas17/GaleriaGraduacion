@@ -3,9 +3,67 @@
  * y del manifest de imágenes optimizadas (data/manifest.json).
  */
 
-const ROTACIONES = [-2.4, 1.6, -1.2, 2.6, -1.9, 1.1, 2.2, -2.8];
 const SIZES = "(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 94vw";
+const EXTENSIONES_VIDEO = new Set(["mp4", "webm", "mov"]);
+const COLORES_CAPITULO = ["azul", "amarillo", "rosa", "verde", "azul"];
+const NOMBRES_NAVEGACION = {
+  "donde-empezo-todo": "El principio",
+  "entre-clase-y-clase": "Entre clases",
+  "los-viajes": "Viajes",
+  "la-gran-noche": "Graduación"
+};
 
+function renderNavegacion(capitulos) {
+  const navegacion = document.getElementById("navegacion-capitulos");
+  navegacion.replaceChildren();
+  capitulos.forEach((capitulo, indice) => {
+    const enlace = document.createElement("a");
+    enlace.href = `#${capitulo.id}`;
+    enlace.className = "negativo negativo-" + COLORES_CAPITULO[indice % COLORES_CAPITULO.length];
+    enlace.innerHTML = `<span class="negativo-foto" aria-hidden="true"></span><span>${NOMBRES_NAVEGACION[capitulo.id] ?? capitulo.titulo}</span>`;
+    navegacion.append(enlace);
+  });
+}
+
+function renderFichaAlbum(capitulo, manifest) {
+  const ficha = document.getElementById("ficha-album");
+  if (!capitulo) {
+    ficha.hidden = true;
+    return;
+  }
+
+  const fotos = capitulo.fotos.filter((foto) => !esVideo(foto));
+  const videos = capitulo.fotos.length - fotos.length;
+  ficha.hidden = false;
+  ficha.innerHTML = `
+    <div class="ficha-copy">
+      <p class="ficha-etiqueta">Índice del álbum</p>
+      <h2 class="ficha-titulo"></h2>
+      <p class="ficha-texto"></p>
+      <ul class="ficha-datos" aria-label="Contenido del álbum">
+        <li><strong>${fotos.length}</strong> fotos</li>
+        <li><strong>${videos}</strong> vídeos</li>
+        <li>Un finde para el recuerdo</li>
+      </ul>
+      <div class="ficha-acciones">
+        <a class="boton boton-principal" href="#${capitulo.id}">Ver los recuerdos</a>
+        <a class="boton boton-secundario" href="#dedicatorias">Ir a dedicatorias</a>
+      </div>
+    </div>
+    <div class="ficha-miniaturas" aria-label="Tres recuerdos del álbum"></div>
+  `;
+  ficha.querySelector(".ficha-titulo").textContent = capitulo.titulo;
+  ficha.querySelector(".ficha-texto").textContent = capitulo.texto || "Un álbum para volver a este finde cuando queramos.";
+  const miniaturas = ficha.querySelector(".ficha-miniaturas");
+  fotos.slice(0, 3).forEach((foto, indice) => {
+    const imagen = atributosImagen(foto.src, manifest);
+    const img = document.createElement("img");
+    img.src = imagen.src;
+    img.alt = foto.caption || `Recuerdo ${indice + 1} de ${capitulo.titulo}`;
+    img.loading = "lazy";
+    miniaturas.append(img);
+  });
+}
 export function idFoto(src) {
   return src
     .replace(/^photos\//, "")
@@ -37,13 +95,24 @@ function atributosImagen(src, manifest) {
   };
 }
 
+function esVideo(item) {
+  const extension = item.src.split(".").pop()?.toLowerCase();
+  return item.tipo === "video" || EXTENSIONES_VIDEO.has(extension);
+}
+
 export function renderGaleria(datos, manifest) {
   const contenedor = document.getElementById("galeria");
   const fotosPlanas = [];
+  let indiceLightbox = 0;
 
-  datos.capitulos.forEach((capitulo, indiceCapitulo) => {
+  const capitulosVisibles = datos.capitulos.filter((capitulo) => capitulo.id === "los-nietos");
+  renderNavegacion(capitulosVisibles);
+  renderFichaAlbum(capitulosVisibles[0], manifest);
+
+  capitulosVisibles.forEach((capitulo, indiceCapitulo) => {
     const seccion = document.createElement("section");
-    seccion.className = "capitulo";
+    const color = COLORES_CAPITULO[indiceCapitulo % COLORES_CAPITULO.length];
+    seccion.className = `capitulo capitulo-${color}`;
     seccion.id = capitulo.id;
 
     const numero = String(indiceCapitulo + 1).padStart(2, "0");
@@ -63,42 +132,65 @@ export function renderGaleria(datos, manifest) {
     const masonry = seccion.querySelector(".masonry");
 
     capitulo.fotos.forEach((foto, indiceFoto) => {
-      const img = atributosImagen(foto.src, manifest);
       const figura = document.createElement("figure");
       figura.className = "polaroid revelar";
+      if (indiceFoto === 0 || (capitulo.fotos.length > 8 && indiceFoto === 7)) figura.classList.add("polaroid-destacada");
       const indiceGlobal = fotosPlanas.length;
-      figura.style.setProperty("--rot", `${ROTACIONES[indiceGlobal % ROTACIONES.length]}deg`);
-      figura.style.setProperty("--rot-cinta", `${indiceGlobal % 2 ? 4 : -3}deg`);
+      const mediaIndex = fotosPlanas.length;
 
-      const alt = foto.caption || `Foto ${indiceFoto + 1} del capítulo ${capitulo.titulo}`;
-      figura.innerHTML = `
-        <a class="foto-enlace" href="${img.grande}"
-           data-pswp-width="${img.ancho}" data-pswp-height="${img.alto}">
-          <img src="${img.src}" ${img.srcset ? `srcset="${img.srcset}" sizes="${SIZES}"` : ""}
-               ${img.anchoReal ? `width="${img.anchoReal}" height="${img.altoReal}"` : ""}
-               loading="lazy" decoding="async" alt="">
-        </a>
-        <figcaption class="pie"></figcaption>
-        <div class="reacciones" data-photo="${idFoto(foto.src)}"></div>
-      `;
+      const caption = foto.caption || `${capitulo.titulo} · Recuerdo ${String(indiceFoto + 1).padStart(2, "0")}`;
+      const alt = caption;
+      let indiceFotoLightbox;
 
-      const imagen = figura.querySelector("img");
-      imagen.alt = alt;
-      if (img.lqip) imagen.style.backgroundImage = `url(${img.lqip})`;
+      if (esVideo(foto)) {
+        figura.classList.add("polaroid-video");
+        figura.innerHTML = `
+          <button class="video-enlace" type="button" data-video-src="${foto.src}" data-caption="${caption}" data-media-index="${mediaIndex}" aria-label="Reproducir vídeo">
+            <video class="video-miniatura" src="${foto.src}" muted playsinline preload="metadata"></video>
+            <span class="video-play" aria-hidden="true"></span>
+          </button>
+          <figcaption class="pie"></figcaption>
+          <div class="reacciones" data-photo="${idFoto(foto.src)}"></div>
+        `;
+      } else {
+        const img = atributosImagen(foto.src, manifest);
+        figura.innerHTML = `
+          <a class="foto-enlace" href="${img.grande}"
+             data-pswp-width="${img.ancho}" data-pswp-height="${img.alto}" data-media-index="${mediaIndex}">
+            <img src="${img.src}" ${img.srcset ? `srcset="${img.srcset}" sizes="${SIZES}"` : ""}
+                 ${img.anchoReal ? `width="${img.anchoReal}" height="${img.altoReal}"` : ""}
+                 loading="lazy" decoding="async" alt="">
+          </a>
+          <figcaption class="pie"></figcaption>
+          <div class="reacciones" data-photo="${idFoto(foto.src)}"></div>
+        `;
+
+        const imagen = figura.querySelector("img");
+        imagen.alt = alt;
+        if (img.lqip) imagen.style.backgroundImage = `url(${img.lqip})`;
+
+        // el lightbox lee el pie desde el enlace
+        figura.querySelector("a").dataset.caption = caption;
+        indiceFotoLightbox = indiceLightbox;
+        indiceLightbox++;
+      }
 
       const pie = figura.querySelector(".pie");
-      pie.textContent = foto.caption ?? "";
+      pie.textContent = caption;
       if (foto.lugar) {
         const lugar = document.createElement("span");
         lugar.className = "lugar";
         lugar.textContent = `📍 ${foto.lugar}`;
         pie.append(lugar);
       }
-      // el lightbox lee el pie desde el enlace
-      figura.querySelector("a").dataset.caption = foto.caption ?? "";
-
       masonry.append(figura);
-      fotosPlanas.push({ ...foto, capitulo: capitulo.titulo });
+      fotosPlanas.push({
+        ...foto,
+        caption,
+        tipo: esVideo(foto) ? "video" : "imagen",
+        capitulo: capitulo.titulo,
+        indiceLightbox: indiceFotoLightbox
+      });
     });
 
     contenedor.append(seccion);
@@ -111,23 +203,30 @@ export function renderHero(datos, manifest) {
   document.title = `${datos.titulo} 🎓`;
   document.getElementById("hero-titulo").textContent = datos.titulo;
   document.getElementById("hero-subtitulo").textContent = datos.subtitulo ?? "";
-  document.getElementById("hero-frase").textContent = datos.frase ?? "";
-
+  const capituloPortada = datos.capitulos?.find((capitulo) => capitulo.id === "los-nietos") ?? datos.capitulos?.[0];
+  document.getElementById("hero-pie").textContent = capituloPortada
+    ? `${capituloPortada.titulo} · ${capituloPortada.texto || "Un álbum para volver cuando queramos."}`
+    : "";
   if (datos.fechaGraduacion) {
     const fecha = new Date(`${datos.fechaGraduacion}T12:00:00`);
-    document.getElementById("hero-fecha").textContent = new Intl.DateTimeFormat("es-ES", {
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    }).format(fecha);
     const anio = document.getElementById("anio-promo");
-    if (anio) anio.textContent = String(fecha.getFullYear());
+    const promocion = String(fecha.getFullYear());
+    if (anio) anio.textContent = promocion;
   }
 
   const heroImg = document.getElementById("hero-foto");
   const src = datos.hero?.src;
   if (!src) return;
   const img = atributosImagen(src, manifest);
+  heroImg.classList.remove("is-cargada");
+  heroImg.classList.add("is-cargando");
+  const mostrarHero = () => {
+    heroImg.classList.remove("is-cargando");
+    heroImg.classList.add("is-cargada");
+  };
+  heroImg.addEventListener("load", mostrarHero, { once: true });
+  heroImg.addEventListener("error", mostrarHero, { once: true });
+  heroImg.decoding = "async";
   heroImg.src = img.grande;
   if (img.srcset) {
     heroImg.srcset = img.srcset;
@@ -136,4 +235,5 @@ export function renderHero(datos, manifest) {
   if (img.lqip) heroImg.style.backgroundImage = `url(${img.lqip})`;
   heroImg.alt = datos.hero.alt ?? "";
   heroImg.setAttribute("fetchpriority", "high");
+  if (heroImg.complete) mostrarHero();
 }

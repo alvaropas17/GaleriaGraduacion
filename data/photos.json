@@ -1,55 +1,253 @@
 {
-  "titulo": "Nuestra graduación",
-  "subtitulo": "Promoción 2026",
-  "frase": "No fue solo una graduación. Fuimos nosotros.",
+  "titulo": "Los guapos y el Jaime",
+  "subtitulo": "La RUM",
+  "frase": "",
   "fechaGraduacion": "2026-06-19",
   "hero": {
-    "src": "photos/04-la-gran-noche/foto-01.jpg",
+    "src": "photos/mallorca2025/mallorca-foto-grupal-mejorada(1)-sin-marca.png",
     "alt": "Foto de grupo el día de la graduación"
   },
   "capitulos": [
     {
+      "id": "los-nietos",
+      "titulo": "Los Nietos",
+      "texto": "Un fin de semana corto pero intenso",
+      "fotos": [
+        {
+          "src": "photos/LosNietos/los-nietos-finde-01.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-02.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-03.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-04.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-05.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-06.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-07.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-08.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-09.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-10.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-11.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-12.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-13.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-14.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-15.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-16.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-17.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-18.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-19.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-20.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/los-nietos-finde-21.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/VID-20260628-WA0016.mp4",
+          "caption": "Vídeo del finde",
+          "tipo": "video"
+        },
+        {
+          "src": "photos/LosNietos/VID-20260628-WA0017.mp4",
+          "caption": "Vídeo del finde",
+          "tipo": "video"
+        },
+        {
+          "src": "photos/LosNietos/biceps-eduardo-sale-cara.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/biceps-eduardo.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/foto-en-coche.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/por-la-noche.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/voley-02.jpg",
+          "caption": ""
+        },
+        {
+          "src": "photos/LosNietos/voley.jpg",
+          "caption": ""
+        }
+      ]
+    },
+    {
       "id": "donde-empezo-todo",
       "titulo": "Donde empezó todo",
-      "texto": "Aquí escribe una anécdota del principio: el primer día, cómo os conocisteis, lo que nadie se imaginaba que acabaría pasando. Este texto se edita en data/photos.json.",
+      "texto": "El principio de todo: cuando empezó esta historia sin saber lo que se nos venía encima.",
       "fotos": [
-        { "src": "photos/01-donde-empezo-todo/foto-01.jpg", "caption": "El primer día, sin saber nada de nada", "lugar": "El insti", "coords": [40.4168, -3.7038] },
-        { "src": "photos/01-donde-empezo-todo/foto-02.jpg", "caption": "Cuando aún nos sentábamos por orden de lista" },
-        { "src": "photos/01-donde-empezo-todo/foto-03.jpg", "caption": "La primera foto juntos" },
-        { "src": "photos/01-donde-empezo-todo/foto-04.jpg", "caption": "El recreo de siempre" }
+        {
+          "src": "photos/01-donde-empezo-todo/foto-01.jpg",
+          "caption": "El primer día, sin saber nada de nada",
+          "lugar": "El insti",
+          "coords": [
+            40.4168,
+            -3.7038
+          ]
+        },
+        {
+          "src": "photos/01-donde-empezo-todo/foto-02.jpg",
+          "caption": "Cuando aún nos sentábamos por orden de lista"
+        },
+        {
+          "src": "photos/01-donde-empezo-todo/foto-03.jpg",
+          "caption": "La primera foto juntos"
+        },
+        {
+          "src": "photos/01-donde-empezo-todo/foto-04.jpg",
+          "caption": "El recreo de siempre"
+        }
       ]
     },
     {
       "id": "entre-clase-y-clase",
       "titulo": "Entre clase y clase",
-      "texto": "Los momentos pequeños que no salen en el álbum oficial: los recreos, las risas en la última fila, los apuntes prestados a última hora.",
+      "texto": "Los momentos pequeños que no salen en el álbum oficial: las risas, los sitios de siempre, las quedadas improvisadas.",
       "fotos": [
-        { "src": "photos/02-entre-clase-y-clase/foto-01.jpg", "caption": "Última fila, como siempre" },
-        { "src": "photos/02-entre-clase-y-clase/foto-02.jpg", "caption": "Estudiando (más o menos)" },
-        { "src": "photos/02-entre-clase-y-clase/foto-03.jpg", "caption": "El día que casi nos echan de la biblioteca", "lugar": "La biblioteca", "coords": [40.4189, -3.7095] },
-        { "src": "photos/02-entre-clase-y-clase/foto-04.jpg", "caption": "Cinco minutos que fueron cuarenta y cinco" }
+        {
+          "src": "photos/02-entre-clase-y-clase/foto-01.jpg",
+          "caption": "Última fila, como siempre"
+        },
+        {
+          "src": "photos/02-entre-clase-y-clase/foto-02.jpg",
+          "caption": "Estudiando (más o menos)"
+        },
+        {
+          "src": "photos/02-entre-clase-y-clase/foto-03.jpg",
+          "caption": "El día que casi nos echan de la biblioteca",
+          "lugar": "La biblioteca",
+          "coords": [
+            40.4189,
+            -3.7095
+          ]
+        },
+        {
+          "src": "photos/02-entre-clase-y-clase/foto-04.jpg",
+          "caption": "Cinco minutos que fueron cuarenta y cinco"
+        }
       ]
     },
     {
       "id": "los-viajes",
       "titulo": "Los viajes",
-      "texto": "Las excursiones, el viaje de fin de curso, y todas las veces que volvimos con más historias que fotos.",
+      "texto": "Las escapadas, los viajes, y todas las veces que volvimos con más historias que fotos.",
       "fotos": [
-        { "src": "photos/03-los-viajes/foto-01.jpg", "caption": "El viaje de fin de curso", "lugar": "La playa", "coords": [39.4699, -0.3763] },
-        { "src": "photos/03-los-viajes/foto-02.jpg", "caption": "Perdidos, pero felices" },
-        { "src": "photos/03-los-viajes/foto-03.jpg", "caption": "El atardecer que nadie quería que acabara", "lugar": "El mirador", "coords": [39.48, -0.35] },
-        { "src": "photos/03-los-viajes/foto-04.jpg", "caption": "La foto que repetimos veinte veces" }
+        {
+          "src": "photos/03-los-viajes/foto-01.jpg",
+          "caption": "La primera escapada grande",
+          "lugar": "La playa",
+          "coords": [
+            39.4699,
+            -0.3763
+          ]
+        },
+        {
+          "src": "photos/03-los-viajes/foto-02.jpg",
+          "caption": "Perdidos, pero felices"
+        },
+        {
+          "src": "photos/03-los-viajes/foto-03.jpg",
+          "caption": "El atardecer que nadie quería que acabara",
+          "lugar": "El mirador",
+          "coords": [
+            39.48,
+            -0.35
+          ]
+        },
+        {
+          "src": "photos/03-los-viajes/foto-04.jpg",
+          "caption": "La foto que repetimos veinte veces"
+        }
       ]
     },
     {
       "id": "la-gran-noche",
       "titulo": "La gran noche",
-      "texto": "Y llegó el día. Las togas, los nervios, los discursos… y la sensación de que esto no se acaba aquí.",
+      "texto": "Y llegó el día. Los nervios, los trajes, las fotos… y la sensación de que esto no se acaba aquí.",
       "fotos": [
-        { "src": "photos/04-la-gran-noche/foto-01.jpg", "caption": "Lo conseguimos 🎓", "lugar": "El paraninfo", "coords": [40.4531, -3.7284] },
-        { "src": "photos/04-la-gran-noche/foto-02.jpg", "caption": "Los birretes por los aires" },
-        { "src": "photos/04-la-gran-noche/foto-03.jpg", "caption": "Las familias también lloraron" },
-        { "src": "photos/04-la-gran-noche/foto-04.jpg", "caption": "La última foto de la noche (o casi)" }
+        {
+          "src": "photos/04-la-gran-noche/foto-01.jpg",
+          "caption": "Lo conseguimos 🎓",
+          "lugar": "El paraninfo",
+          "coords": [
+            40.4531,
+            -3.7284
+          ]
+        },
+        {
+          "src": "photos/04-la-gran-noche/foto-02.jpg",
+          "caption": "Los birretes por los aires"
+        },
+        {
+          "src": "photos/04-la-gran-noche/foto-03.jpg",
+          "caption": "Las familias también lloraron"
+        },
+        {
+          "src": "photos/04-la-gran-noche/foto-04.jpg",
+          "caption": "La última foto de la noche (o casi)"
+        }
       ]
     }
   ]

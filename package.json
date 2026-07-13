@@ -8,7 +8,7 @@
     "optimizar": "node scripts/optimize-images.mjs",
     "placeholders": "node scripts/make-placeholders.mjs",
     "build": "node scripts/optimize-images.mjs",
-    "servir": "npx --yes serve -l 4173 ."
+    "servir": "npx --yes serve -l tcp://0.0.0.0:4173 ."
   },
   "license": "MIT",
   "devDependencies": {
